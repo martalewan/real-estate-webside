@@ -1,9 +1,21 @@
+import Nav from "./components/Nav"
+import Hero from "./components/Hero"
+import FeaturedProperty from "./components/FeaturedProperty"
+import PropertyGrid from "./components/PropertyGrid"
+import Stats from "./components/Stats"
+import Footer from "./components/Footer"
+
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black">
-      <h1 className="text-5xl font-bold text-white">
-        Tailwind v4 🚀
-      </h1>
+    <div className="min-h-screen">
+
+      <Nav />
+      <Hero />
+      <FeaturedProperty />
+      <PropertyGrid />
+      <Stats />
+      <Footer />
+
     </div>
   )
 }
