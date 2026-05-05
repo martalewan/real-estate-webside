@@ -1,13 +1,31 @@
-export default function PropertyCard({ title, location, price }) {
+import { Link } from "react-router-dom"
+
+export default function PropertyCard({ id, title, location, price, images }) {
+    console.log(images?.[0])
     return (
-        <div className="space-y-4">
-            <div className="h-72 border border-[#e8e2da] bg-white" />
+        <Link to={`/property/${id}`}>
 
-            <h4 className="font-serif text-xl">{title}</h4>
+            <div className="space-y-4 cursor-pointer">
 
-            <p className="text-sm text-gray-500">
-                {location} • {price}
-            </p>
-        </div>
+                {/* IMAGE */}
+                <div className="overflow-hidden border border-[#e8e2da] bg-white">
+                    <img
+                        src={images?.[0]}
+                        alt={title}
+                        className="h-72 w-full object-cover transition duration-700 hover:scale-105"
+                        loading="lazy"
+                    />
+                </div>
+
+                {/* TEXT */}
+                <h4 className="font-serif text-xl">{title}</h4>
+
+                <p className="text-sm text-gray-500">
+                    {location} • {price}
+                </p>
+
+            </div>
+
+        </Link>
     )
 }

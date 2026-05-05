@@ -1,4 +1,5 @@
-import PropertyCard from "./PropertyCard"
+import { properties } from "../data/data";
+import PropertyCard from "./PropertyCard";
 
 export default function PropertyGrid() {
     return (
@@ -11,23 +12,16 @@ export default function PropertyGrid() {
 
             <div className="grid md:grid-cols-3 gap-10">
 
-                <PropertyCard
-                    title="West Village Loft"
-                    location="New York"
-                    price="$4.2M"
-                />
-
-                <PropertyCard
-                    title="Coastal Residence"
-                    location="Malibu"
-                    price="$9.8M"
-                />
-
-                <PropertyCard
-                    title="Penthouse Suite"
-                    location="Paris"
-                    price="$7.1M"
-                />
+                {properties.slice(0, 3).map((p) => (
+                    <PropertyCard
+                        key={p.id}
+                        id={p.id}
+                        title={p.title}
+                        location={p.location}
+                        price={`$${p.price.toLocaleString()}`}
+                        images={p.images}
+                    />
+                ))}
 
             </div>
         </section>

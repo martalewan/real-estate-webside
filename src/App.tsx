@@ -1,21 +1,12 @@
-import Nav from "./components/Nav"
-import Hero from "./components/Hero"
-import FeaturedProperty from "./components/FeaturedProperty"
-import PropertyGrid from "./components/PropertyGrid"
-import Stats from "./components/Stats"
-import Footer from "./components/Footer"
+import { Routes, Route } from "react-router-dom"
+import Home from "./pages/Home"
+import Property from "./pages/Property"
 
 export default function App() {
   return (
-    <div className="min-h-screen">
-
-      <Nav />
-      <Hero />
-      <FeaturedProperty />
-      <PropertyGrid />
-      <Stats />
-      <Footer />
-
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/property/:id" element={<Property />} />
+    </Routes>
   )
 }
