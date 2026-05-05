@@ -1,1 +1,143 @@
 @import "tailwindcss";
+
+/* ===== Theme ===== */
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+
+  --bg: #faf7f2;
+  --bg-soft: #f4efe8;
+  --surface: rgba(255, 255, 255, 0.75);
+
+  --border: #e8e2da;
+
+  --text: #1c1c1c;
+  --text-muted: #7a7268;
+
+  --accent: #b9a999;
+
+  --radius: 14px;
+}
+
+/* ===== Base ===== */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  @apply antialiased;
+}
+
+* {
+  border-color: var(--border);
+}
+
+/* ===== Typography ===== */
+h1,
+h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+h1 {
+  @apply text-5xl md:text-6xl font-medium leading-tight;
+}
+
+h2 {
+  @apply text-3xl md:text-4xl font-medium;
+}
+
+h3 {
+  @apply text-xl font-medium;
+}
+
+p {
+  color: var(--text-muted);
+  @apply leading-relaxed text-[15px];
+}
+
+/* ===== Links ===== */
+a {
+  color: var(--text);
+  position: relative;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ===== Buttons ===== */
+.btn {
+  @apply px-6 py-3 text-sm tracking-wide;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Secondary */
+.btn-secondary {
+  @apply px-6 py-3 text-sm;
+  border-radius: var(--radius);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-soft);
+}
+
+/* ===== Inputs ===== */
+input,
+textarea {
+  @apply w-full px-4 py-3 text-sm;
+  border-radius: var(--radius);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ===== Cards ===== */
+.card {
+  padding: 2rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* ===== Divider ===== */
+.divider {
+  height: 1px;
+  background: var(--border);
+  opacity: 0.6;
+}
+
+/* ===== Layout ===== */
+.container {
+  @apply max-w-5xl mx-auto px-6;
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--accent);
+  color: white;
+}
