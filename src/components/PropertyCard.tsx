@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import useFavorites from "../hooks/useFavorites"
 
 type PropertyCardProps = {
     id: number
@@ -23,18 +24,32 @@ export default function PropertyCard({
     size,
     type
 }: PropertyCardProps) {
+    const { isFavorite, toggle } = useFavorites()
+    const saved = isFavorite(id)
+
     return (
-        <Link to={`/property/${id}`}>
-            <div className="group cursor-pointer">
-                <div className="overflow-hidden border border-[#e8e2da] bg-white">
+        <div className="group">
+            <div className="relative overflow-hidden border border-[#e8e2da] bg-white">
+                <Link to={`/property/${id}`}>
                     <img
                         src={images?.[0]}
                         alt={title}
                         className="h-70 w-full object-cover transition duration-700 group-hover:scale-[1.03]"
                         loading="lazy"
                     />
-                </div>
+                </Link>
 
+                <button
+                    type="button"
+                    onClick={() => toggle(id)}
+                    className="absolute right-4 top-4 h-10 w-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-lg shadow-sm hover:bg-white transition"
+                    aria-label={saved ? "Remove from favorites" : "Save to favorites"}
+                >
+                    {saved ? "♥" : "♡"}
+                </button>
+            </div>
+
+            <Link to={`/property/${id}`}>
                 <div className="pt-4 space-y-3">
                     <div className="flex items-start justify-between gap-6">
                         <h4 className="font-serif text-xl leading-snug text-gray-900">
@@ -46,9 +61,7 @@ export default function PropertyCard({
                         </span>
                     </div>
 
-                    <p className="text-sm text-gray-500">
-                        {location}
-                    </p>
+                    <p className="text-sm text-gray-500">{location}</p>
 
                     <div className="border-t border-[#f1ece6]" />
 
@@ -64,7 +77,7 @@ export default function PropertyCard({
                         </span>
                     </div>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     )
 }

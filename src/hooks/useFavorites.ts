@@ -1,57 +1,65 @@
 import { useEffect, useState } from "react"
 
 const FAVORITES_KEY = "favorites"
+const FAVORITES_EVENT = "favorites-change"
 
-type UseFavoritesReturn = {
-    favorites: number[]
-    toggle: (id: number) => void
-    isFavorite: (id: number) => boolean
-    clearFavorites: () => void
+function readFavorites(): number[] {
+    try {
+        const stored = JSON.parse(
+            localStorage.getItem(FAVORITES_KEY) || "[]"
+        ) as unknown
+
+        return Array.isArray(stored) &&
+            stored.every((item) => typeof item === "number")
+            ? stored
+            : []
+    } catch {
+        return []
+    }
 }
 
-export default function useFavorites(): UseFavoritesReturn {
-    const [favorites, setFavorites] = useState<number[]>([])
+export default function useFavorites() {
+    const [favorites, setFavorites] = useState<number[]>(readFavorites)
 
     useEffect(() => {
-        try {
-            const stored = JSON.parse(
-                localStorage.getItem(FAVORITES_KEY) || "[]"
-            ) as unknown
+        const syncFavorites = () => {
+            setFavorites(readFavorites())
+        }
 
-            if (
-                Array.isArray(stored) &&
-                stored.every((item) => typeof item === "number")
-            ) {
-                setFavorites(stored)
-            }
-        } catch (error) {
-            console.error(
-                "Failed to parse favorites",
-                error
-            )
+        window.addEventListener(FAVORITES_EVENT, syncFavorites)
+        window.addEventListener("storage", syncFavorites)
+
+        return () => {
+            window.removeEventListener(FAVORITES_EVENT, syncFavorites)
+            window.removeEventListener("storage", syncFavorites)
         }
     }, [])
 
-    const toggle = (id: number): void => {
-        const updated = favorites.includes(id)
-            ? favorites.filter((favoriteId) => favoriteId !== id)
-            : [...favorites, id]
-
-        setFavorites(updated)
+    const updateFavorites = (nextFavorites: number[]) => {
+        setFavorites(nextFavorites)
 
         localStorage.setItem(
             FAVORITES_KEY,
-            JSON.stringify(updated)
+            JSON.stringify(nextFavorites)
         )
+
+        window.dispatchEvent(new Event(FAVORITES_EVENT))
     }
 
-    const isFavorite = (id: number): boolean => {
+    const toggle = (id: number) => {
+        const nextFavorites = favorites.includes(id)
+            ? favorites.filter((favoriteId) => favoriteId !== id)
+            : [...favorites, id]
+
+        updateFavorites(nextFavorites)
+    }
+
+    const isFavorite = (id: number) => {
         return favorites.includes(id)
     }
 
-    const clearFavorites = (): void => {
-        setFavorites([])
-        localStorage.removeItem(FAVORITES_KEY)
+    const clearFavorites = () => {
+        updateFavorites([])
     }
 
     return {
