@@ -1,10 +1,13 @@
 import { Link, useLocation } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
 import { setAuthFrom } from "../helpers/authRedirect"
+import useFavorites from "../hooks/useFavorites"
 
 export default function Nav() {
     const { user, signOut } = useAuth()
     const location = useLocation()
+    const { favorites } = useFavorites()
+
 
     return (
         <header className="absolute top-0 left-0 w-full z-50">
@@ -22,6 +25,19 @@ export default function Nav() {
                         className="hover:text-black transition"
                     >
                         Properties
+                    </Link>
+
+                    <Link
+                        to="/favorites"
+                        className="hover:text-black transition flex items-center gap-2"
+                    >
+                        Favorites
+
+                        {favorites.length > 0 && (
+                            <span className="text-[11px] text-gray-400">
+                                ({favorites.length})
+                            </span>
+                        )}
                     </Link>
 
                     {!user ? (

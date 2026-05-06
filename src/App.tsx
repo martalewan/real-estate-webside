@@ -5,6 +5,7 @@ import Properties from "./pages/Properties"
 import MainLayout from "./layouts/MainLayout"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Favorites from "./pages/Favorites"
 
 export default function App() {
   return (
@@ -14,7 +15,7 @@ export default function App() {
       <Route element={<MainLayout />}>
 
         <Route path="/" element={<Home />} />
-
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/property/:id" element={<Property />} />
       </Route>
