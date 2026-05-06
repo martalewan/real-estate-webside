@@ -11,7 +11,7 @@ export default function Filters({
     return (
         <div className="mb-16 space-y-10">
 
-            <div className="bg-white border border-[#eee6dd] shadow-sm rounded-2xl p-6">
+            <div className="bg-white border border-[#eee6dd] rounded-md p-6">
 
                 <FilterControls
                     filters={filters}

@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom"
 
 export default function PropertyCard({ id, title, location, price, images }) {
-    console.log(images?.[0])
+
     return (
         <Link to={`/property/${id}`}>
 
             <div className="space-y-4 cursor-pointer">
 
-                {/* IMAGE */}
                 <div className="overflow-hidden border border-[#e8e2da] bg-white">
                     <img
                         src={images?.[0]}
@@ -17,7 +16,6 @@ export default function PropertyCard({ id, title, location, price, images }) {
                     />
                 </div>
 
-                {/* TEXT */}
                 <h4 className="font-serif text-xl">{title}</h4>
 
                 <p className="text-sm text-gray-500">
