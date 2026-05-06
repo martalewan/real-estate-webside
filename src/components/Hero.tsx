@@ -47,7 +47,7 @@ export default function Hero() {
                         </div>
 
                         <div className="relative pr-10">
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 h-8 w-px bg-[#e8e2da]" />
+                            <div className="absolute right-5 top-1/2 -translate-y-1/2 h-8 w-px bg-[#e8e2da]" />
 
                             <p className="font-serif text-2xl leading-none text-black">
                                 18
@@ -70,7 +70,7 @@ export default function Hero() {
                     </div>
                 </div>
 
-                <div className="relative max-w-[480px] ml-auto">
+                <div className="relative max-w-[420px] ml-auto">
                     <div className="absolute -inset-5 border border-[#eee6dd]" />
                     <div className="absolute -right-8 -top-8 h-48 w-48 rounded-full bg-[#efe7dc] blur-3xl opacity-70" />
 
@@ -85,7 +85,7 @@ export default function Hero() {
                     </div>
 
 
-                    <div className="absolute -right-10 top-8">
+                    <div className="absolute right-10 top-8">
                         <div className="relative flex items-center justify-center">
                             <div className="absolute h-40 w-40 rounded-full bg-white shadow-[0_20px_60px_rgba(0,0,0,0.12)]" />
 
