@@ -3,6 +3,19 @@ import { useZoomPan } from "../hooks/useZoomPan"
 
 const SCALE = 2.5
 
+type LightboxProps = {
+    image: string
+    activeIndex: number
+    total: number
+    onClose: () => void
+    onNext: (
+        e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
+    ) => void
+    onPrev: (
+        e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
+    ) => void
+}
+
 export default function Lightbox({
     image,
     activeIndex,
@@ -10,7 +23,7 @@ export default function Lightbox({
     onClose,
     onNext,
     onPrev
-}) {
+}: LightboxProps) {
     const {
         imgRef,
         zoomed,
@@ -24,14 +37,17 @@ export default function Lightbox({
     })
 
     useEffect(() => {
-        const onKeyDown = (e) => {
+        const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose()
             if (e.key === "ArrowRight") onNext(e)
             if (e.key === "ArrowLeft") onPrev(e)
         }
 
         window.addEventListener("keydown", onKeyDown)
-        return () => window.removeEventListener("keydown", onKeyDown)
+
+        return () => {
+            window.removeEventListener("keydown", onKeyDown)
+        }
     }, [onClose, onNext, onPrev])
 
     return (

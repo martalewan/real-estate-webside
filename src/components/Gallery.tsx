@@ -2,22 +2,48 @@ import { useState } from "react"
 import GalleryThumbs from "./GalleryThumbs"
 import Lightbox from "./Lightbox"
 
-export default function Gallery({ images = [] }) {
-    const [activeIndex, setActiveIndex] = useState(null)
+type GalleryProps = {
+    images?: string[]
+}
+
+export default function Gallery({
+    images = []
+}: GalleryProps) {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
     if (!images.length) return null
 
     const activeImage =
-        activeIndex !== null ? images[activeIndex] : null
+        activeIndex !== null
+            ? images[activeIndex]
+            : null
 
-    const next = (e) => {
+    const next = (
+        e: React.MouseEvent<HTMLButtonElement>
+    ) => {
         e.stopPropagation()
-        setActiveIndex((p) => (p === images.length - 1 ? 0 : p + 1))
+
+        setActiveIndex((prev) =>
+            prev === null
+                ? 0
+                : prev === images.length - 1
+                    ? 0
+                    : prev + 1
+        )
     }
 
-    const prev = (e) => {
+    const prev = (
+        e: React.MouseEvent<HTMLButtonElement>
+    ) => {
         e.stopPropagation()
-        setActiveIndex((p) => (p === 0 ? images.length - 1 : p - 1))
+
+        setActiveIndex((prev) =>
+            prev === null
+                ? 0
+                : prev === 0
+                    ? images.length - 1
+                    : prev - 1
+        )
     }
 
     return (

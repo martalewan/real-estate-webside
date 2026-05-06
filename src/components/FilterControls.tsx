@@ -1,12 +1,26 @@
+export type Filters = {
+    city: string
+    type: string
+    priceMin: number | null
+    priceMax: number | null
+    bedrooms: number
+}
+
+type FilterControlsProps = {
+    filters: Filters
+    onChange: (key: keyof Filters, value: string | number | null) => void
+    cities: string[]
+    types: string[]
+}
+
 export default function FilterControls({
     filters,
     onChange,
     cities,
     types
-}) {
+}: FilterControlsProps) {
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
-
             <div>
                 <label className="text-[11px] tracking-[0.2em] text-gray-400 uppercase">
                     City
@@ -18,8 +32,10 @@ export default function FilterControls({
                     className="w-full mt-2 px-4 py-3 rounded-xl bg-[#fbfaf8] border border-transparent focus:border-gray-300 outline-none text-sm"
                 >
                     <option value="">All locations</option>
-                    {cities.map((c) => (
-                        <option key={c} value={c}>{c}</option>
+                    {cities.map((city) => (
+                        <option key={city} value={city}>
+                            {city}
+                        </option>
                     ))}
                 </select>
             </div>
@@ -35,8 +51,10 @@ export default function FilterControls({
                     className="w-full mt-2 px-4 py-3 rounded-xl bg-[#fbfaf8] border border-transparent focus:border-gray-300 outline-none text-sm"
                 >
                     <option value="">All types</option>
-                    {types.map((t) => (
-                        <option key={t} value={t}>{t}</option>
+                    {types.map((type) => (
+                        <option key={type} value={type}>
+                            {type}
+                        </option>
                     ))}
                 </select>
             </div>
@@ -49,9 +67,12 @@ export default function FilterControls({
                 <input
                     type="number"
                     placeholder="From €3 000"
-                    value={filters.priceMin || ""}
+                    value={filters.priceMin ?? ""}
                     onChange={(e) =>
-                        onChange("priceMin", Number(e.target.value) || null)
+                        onChange(
+                            "priceMin",
+                            e.target.value === "" ? null : Number(e.target.value)
+                        )
                     }
                     className="w-full mt-2 px-4 py-3 rounded-xl bg-[#fbfaf8] border border-transparent focus:border-gray-300 outline-none text-sm"
                 />
@@ -65,9 +86,12 @@ export default function FilterControls({
                 <input
                     type="number"
                     placeholder="From €3 000 000"
-                    value={filters.priceMax || ""}
+                    value={filters.priceMax ?? ""}
                     onChange={(e) =>
-                        onChange("priceMax", Number(e.target.value) || null)
+                        onChange(
+                            "priceMax",
+                            e.target.value === "" ? null : Number(e.target.value)
+                        )
                     }
                     className="w-full mt-2 px-4 py-3 rounded-xl bg-[#fbfaf8] border border-transparent focus:border-gray-300 outline-none text-sm"
                 />
@@ -80,7 +104,9 @@ export default function FilterControls({
 
                 <select
                     value={filters.bedrooms}
-                    onChange={(e) => onChange("bedrooms", Number(e.target.value))}
+                    onChange={(e) =>
+                        onChange("bedrooms", Number(e.target.value))
+                    }
                     className="w-full mt-2 px-4 py-3 rounded-xl bg-[#fbfaf8] border border-transparent focus:border-gray-300 outline-none text-sm"
                 >
                     <option value={0}>Any</option>
@@ -89,7 +115,6 @@ export default function FilterControls({
                     <option value={4}>4+</option>
                 </select>
             </div>
-
         </div>
     )
 }

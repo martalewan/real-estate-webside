@@ -1,56 +1,83 @@
 import { useSearchParams } from "react-router-dom"
-import { properties } from "../data/data"
+import { properties, type Property } from "../data/data"
 import PropertyCard from "../components/PropertyCard"
 import Filters from "../components/Filters"
+
+type FiltersState = {
+    city: string
+    type: string
+    priceMin: number | null
+    priceMax: number | null
+    bedrooms: number
+}
+
+type FilterKey = keyof FiltersState
 
 export default function Properties() {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const filters = {
+    const filters: FiltersState = {
         city: searchParams.get("city") || "",
         type: searchParams.get("type") || "",
-        priceMin: Number(searchParams.get("priceMin")) || 0,
-        priceMax: Number(searchParams.get("priceMax")) || null,
-        bedrooms: Number(searchParams.get("bedrooms")) || null
+        priceMin: searchParams.get("priceMin")
+            ? Number(searchParams.get("priceMin"))
+            : null,
+        priceMax: searchParams.get("priceMax")
+            ? Number(searchParams.get("priceMax"))
+            : null,
+        bedrooms: searchParams.get("bedrooms")
+            ? Number(searchParams.get("bedrooms"))
+            : 0
     }
 
-    const cities = [...new Set(properties.map((p) => p.location))]
-    const types = [...new Set(properties.map((p) => p.type))]
+    const cities = [
+        ...new Set(properties.map((property) => property.location))
+    ]
 
-    const updateFilter = (key, value) => {
+    const types = [
+        ...new Set(properties.map((property) => property.type))
+    ]
+
+    const updateFilter = (
+        key: FilterKey,
+        value: string | number | null
+    ): void => {
         const params = new URLSearchParams(searchParams)
 
         if (!value || value === 0 || value === "") {
             params.delete(key)
         } else {
-            params.set(key, value)
+            params.set(key, String(value))
         }
 
         setSearchParams(params)
     }
 
-    const resetFilters = () => {
+    const resetFilters = (): void => {
         setSearchParams({})
     }
 
-    const filtered = properties.filter((p) => {
+    const filtered: Property[] = properties.filter((property) => {
         return (
-            (!filters.city || p.location === filters.city) &&
-            (!filters.type || p.type === filters.type) &&
-            (!filters.priceMin || p.price >= filters.priceMin) &&
-            (!filters.priceMax || p.price <= filters.priceMax) &&
-            p.bedrooms >= filters.bedrooms
+            (!filters.city || property.location === filters.city) &&
+            (!filters.type || property.type === filters.type) &&
+            (!filters.priceMin || property.price >= filters.priceMin) &&
+            (!filters.priceMax || property.price <= filters.priceMax) &&
+            property.bedrooms >= filters.bedrooms
         )
     })
 
     return (
         <div className="container py-16 space-y-12">
-
             <div>
-                <h1 className="font-serif text-5xl">All Properties</h1>
+                <h1 className="font-serif text-5xl">
+                    All Properties
+                </h1>
+
                 <p className="text-gray-500 mt-2">
                     {filtered.length} residences found
                 </p>
+
                 <div className="divider mt-6" />
             </div>
 
@@ -63,21 +90,21 @@ export default function Properties() {
             />
 
             <div className="grid md:grid-cols-3 gap-10">
-                {filtered.map((p) => (
+                {filtered.map((property) => (
                     <PropertyCard
-                        key={p.id}
-                        id={p.id}
-                        title={p.title}
-                        location={p.location}
-                        price={`$${p.price.toLocaleString()}`}
-                        images={p.images}
-                        bedrooms={p.bedrooms}
-                        bathrooms={p.bathrooms}
-                        size={p.size}
-                        type={p.type} />
+                        key={property.id}
+                        id={property.id}
+                        title={property.title}
+                        location={property.location}
+                        price={`$${property.price.toLocaleString()}`}
+                        images={property.images}
+                        bedrooms={property.bedrooms}
+                        bathrooms={property.bathrooms}
+                        size={property.size}
+                        type={property.type}
+                    />
                 ))}
             </div>
-
         </div>
     )
 }

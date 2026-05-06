@@ -2,36 +2,54 @@ import { useEffect, useState } from "react"
 
 const FAVORITES_KEY = "favorites"
 
-export default function useFavorites() {
-    const [favorites, setFavorites] = useState([])
+type UseFavoritesReturn = {
+    favorites: number[]
+    toggle: (id: number) => void
+    isFavorite: (id: number) => boolean
+    clearFavorites: () => void
+}
+
+export default function useFavorites(): UseFavoritesReturn {
+    const [favorites, setFavorites] = useState<number[]>([])
 
     useEffect(() => {
         try {
-            const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY))
-            if (Array.isArray(stored)) {
+            const stored = JSON.parse(
+                localStorage.getItem(FAVORITES_KEY) || "[]"
+            ) as unknown
+
+            if (
+                Array.isArray(stored) &&
+                stored.every((item) => typeof item === "number")
+            ) {
                 setFavorites(stored)
             }
-        } catch (e) {
-            console.error("Failed to parse favorites", e)
+        } catch (error) {
+            console.error(
+                "Failed to parse favorites",
+                error
+            )
         }
     }, [])
 
-    const toggle = (id) => {
-        let updated
-
-        if (favorites.includes(id)) {
-            updated = favorites.filter((f) => f !== id)
-        } else {
-            updated = [...favorites, id]
-        }
+    const toggle = (id: number): void => {
+        const updated = favorites.includes(id)
+            ? favorites.filter((favoriteId) => favoriteId !== id)
+            : [...favorites, id]
 
         setFavorites(updated)
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(updated))
+
+        localStorage.setItem(
+            FAVORITES_KEY,
+            JSON.stringify(updated)
+        )
     }
 
-    const isFavorite = (id) => favorites.includes(id)
+    const isFavorite = (id: number): boolean => {
+        return favorites.includes(id)
+    }
 
-    const clearFavorites = () => {
+    const clearFavorites = (): void => {
         setFavorites([])
         localStorage.removeItem(FAVORITES_KEY)
     }

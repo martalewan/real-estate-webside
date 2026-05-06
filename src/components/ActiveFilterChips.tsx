@@ -1,13 +1,22 @@
+import type { Filters } from "./FilterControls"
+
+type ActiveFilterChipsProps = {
+    filters: Filters
+    onChange: (
+        key: keyof Filters,
+        value: string | number | null
+    ) => void
+    onReset: () => void
+}
+
 export default function ActiveFilterChips({
     filters,
     onChange,
     onReset
-}) {
+}: ActiveFilterChipsProps) {
     return (
         <div className="flex justify-between items-center mt-8">
-
             <div className="flex gap-2 flex-wrap">
-
                 {filters.city && (
                     <button
                         onClick={() => onChange("city", "")}
@@ -34,8 +43,13 @@ export default function ActiveFilterChips({
                         }}
                         className="px-4 py-1.5 text-sm rounded-full bg-[#f4efe8] text-gray-700 hover:bg-[#eee2d6] transition"
                     >
-                        {filters.priceMin ? `$${filters.priceMin.toLocaleString()}` : "Any"} —{" "}
-                        {filters.priceMax ? `$${filters.priceMax.toLocaleString()}` : "∞"}
+                        {filters.priceMin
+                            ? `$${filters.priceMin.toLocaleString()}`
+                            : "Any"}{" "}
+                        —{" "}
+                        {filters.priceMax
+                            ? `$${filters.priceMax.toLocaleString()}`
+                            : "∞"}
                     </button>
                 )}
 
@@ -47,7 +61,6 @@ export default function ActiveFilterChips({
                         {filters.bedrooms}+ beds ✕
                     </button>
                 )}
-
             </div>
 
             <button
@@ -56,7 +69,6 @@ export default function ActiveFilterChips({
             >
                 Reset
             </button>
-
         </div>
     )
 }

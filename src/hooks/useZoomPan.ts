@@ -1,54 +1,91 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 const DRAG_THRESHOLD = 4
 
-export function useZoomPan({ scale, resetKey }) {
-    const imgRef = useRef(null)
-    const posRef = useRef({ x: 0, y: 0 })
+type Position = {
+    x: number
+    y: number
+}
+
+type DragState = {
+    active: boolean
+    moved: boolean
+    startX: number
+    startY: number
+}
+
+type UseZoomPanParams = {
+    scale: number
+    resetKey: string
+}
+
+type UseZoomPanReturn = {
+    imgRef: React.RefObject<HTMLImageElement | null>
+    zoomed: boolean
+    toggleZoom: (e: React.MouseEvent<HTMLImageElement>) => void
+    onPointerDown: (e: React.PointerEvent<HTMLImageElement>) => void
+    onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void
+    onPointerUp: (e: React.PointerEvent<HTMLDivElement>) => void
+}
+
+export function useZoomPan({
+    scale,
+    resetKey
+}: UseZoomPanParams): UseZoomPanReturn {
+    const imgRef = useRef<HTMLImageElement | null>(null)
+    const posRef = useRef<Position>({ x: 0, y: 0 })
     const [zoomed, setZoomed] = useState(false)
 
-    const drag = useRef({
+    const drag = useRef<DragState>({
         active: false,
         moved: false,
         startX: 0,
         startY: 0
     })
 
-    const apply = (x, y, isZoomed) => {
-        if (!imgRef.current) return
+    const apply = useCallback(
+        (x: number, y: number, isZoomed: boolean): void => {
+            if (!imgRef.current) return
 
-        imgRef.current.style.transform = isZoomed
-            ? `translate(${x}px, ${y}px) scale(${scale})`
-            : "translate(0px, 0px) scale(1)"
-    }
+            imgRef.current.style.transform = isZoomed
+                ? `translate(${x}px, ${y}px) scale(${scale})`
+                : "translate(0px, 0px) scale(1)"
+        },
+        [scale]
+    )
 
-    const clampPosition = (x, y) => {
-        if (!imgRef.current) return { x, y }
+    const clampPosition = useCallback(
+        (x: number, y: number): Position => {
+            if (!imgRef.current) return { x, y }
 
-        const rect = imgRef.current.getBoundingClientRect()
+            const rect = imgRef.current.getBoundingClientRect()
 
-        const maxX = ((scale - 1) * rect.width) / (2 * scale)
-        const maxY = ((scale - 1) * rect.height) / (2 * scale)
+            const maxX = ((scale - 1) * rect.width) / (2 * scale)
+            const maxY = ((scale - 1) * rect.height) / (2 * scale)
 
-        return {
-            x: Math.max(-maxX, Math.min(maxX, x)),
-            y: Math.max(-maxY, Math.min(maxY, y))
-        }
-    }
+            return {
+                x: Math.max(-maxX, Math.min(maxX, x)),
+                y: Math.max(-maxY, Math.min(maxY, y))
+            }
+        },
+        [scale]
+    )
 
-    const reset = () => {
+    const reset = useCallback((): void => {
         setZoomed(false)
         posRef.current = { x: 0, y: 0 }
         drag.current.active = false
         drag.current.moved = false
         apply(0, 0, false)
-    }
+    }, [apply])
 
     useEffect(() => {
         reset()
-    }, [resetKey])
+    }, [reset, resetKey])
 
-    const onPointerDown = (e) => {
+    const onPointerDown = (
+        e: React.PointerEvent<HTMLImageElement>
+    ): void => {
         if (!zoomed) return
 
         e.preventDefault()
@@ -62,7 +99,9 @@ export function useZoomPan({ scale, resetKey }) {
         e.currentTarget.setPointerCapture(e.pointerId)
     }
 
-    const onPointerMove = (e) => {
+    const onPointerMove = (
+        e: React.PointerEvent<HTMLDivElement>
+    ): void => {
         if (!drag.current.active || !zoomed) return
 
         const { x, y } = clampPosition(
@@ -81,7 +120,9 @@ export function useZoomPan({ scale, resetKey }) {
         apply(x, y, true)
     }
 
-    const onPointerUp = (e) => {
+    const onPointerUp = (
+        e: React.PointerEvent<HTMLDivElement>
+    ): void => {
         drag.current.active = false
 
         if (imgRef.current?.hasPointerCapture?.(e.pointerId)) {
@@ -89,7 +130,9 @@ export function useZoomPan({ scale, resetKey }) {
         }
     }
 
-    const toggleZoom = (e) => {
+    const toggleZoom = (
+        e: React.MouseEvent<HTMLImageElement>
+    ): void => {
         e.stopPropagation()
 
         if (drag.current.moved) {
@@ -97,17 +140,17 @@ export function useZoomPan({ scale, resetKey }) {
             return
         }
 
-        setZoomed((z) => {
-            const next = !z
+        setZoomed((currentZoomed) => {
+            const nextZoomed = !currentZoomed
 
-            if (next) {
+            if (nextZoomed) {
                 apply(posRef.current.x, posRef.current.y, true)
             } else {
                 posRef.current = { x: 0, y: 0 }
                 apply(0, 0, false)
             }
 
-            return next
+            return nextZoomed
         })
     }
 

@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react"
-import { getUser, setUser, clearUser } from "../helpers/auth"
+import {
+    getUser,
+    setUser,
+    clearUser,
+    type User
+} from "../helpers/auth"
 
-export default function useAuth() {
-    const [user, setUserState] = useState(null)
+type UseAuthReturn = {
+    user: User | null
+    signIn: (user: User) => void
+    signOut: () => void
+}
+
+export default function useAuth(): UseAuthReturn {
+    const [user, setUserState] = useState<User | null>(null)
 
     useEffect(() => {
         setUserState(getUser())
     }, [])
 
-    const signIn = (data) => {
-        setUser(data)
-        setUserState(data)
+    const signIn = (user: User): void => {
+        setUser(user)
+        setUserState(user)
     }
 
-    const signOut = () => {
+    const signOut = (): void => {
         clearUser()
         setUserState(null)
     }
 
-    return { user, signIn, signOut }
+    return {
+        user,
+        signIn,
+        signOut
+    }
 }

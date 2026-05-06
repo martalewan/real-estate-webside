@@ -1,4 +1,9 @@
-export default function GalleryThumbs({ images, onSelect }) {
+type GalleryThumbsProps = {
+    images: string[]
+    onSelect: (index: number) => void
+}
+
+export default function GalleryThumbs({ images, onSelect }: GalleryThumbsProps) {
     return (
         <div className="grid grid-cols-4 gap-3">
             {images.map((img, i) => (
