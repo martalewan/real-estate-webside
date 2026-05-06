@@ -1,4 +1,6 @@
 import { useParams } from "react-router-dom"
+import type { LucideIcon } from "lucide-react"
+
 import {
     BedDouble,
     Bath,
@@ -20,23 +22,64 @@ export default function Property() {
 
     if (!property) {
         return (
-            <div className="container py-20">
+            <div className="container pt-32 pb-16">
                 Not found
             </div>
         )
     }
 
+    const mainDetails: {
+        icon: LucideIcon
+        label: string
+    }[] = [
+            {
+                icon: BedDouble,
+                label: `${property.bedrooms} bedrooms`
+            },
+            {
+                icon: Bath,
+                label: `${property.bathrooms} bathrooms`
+            },
+            {
+                icon: Ruler,
+                label: `${property.size} m²`
+            },
+            {
+                icon: Home,
+                label: property.type
+            }
+        ]
+
+    const secondaryDetails = [
+        ["Outdoor space", `${property.outdoorSize} m²`],
+        ["Parking", `${property.parkingSpaces} spaces`],
+        ["Built", property.yearBuilt],
+        ["Energy rating", property.energyRating]
+    ]
+
     return (
-        <div className="container py-16 space-y-14">
-            <div className="space-y-3">
-                <h1 className="font-serif text-5xl">
-                    {property.title}
-                </h1>
+        <div className="container pt-32 pb-16 space-y-14">
+            <div className="space-y-5">
+                <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 border border-[#e8e2da] text-[11px] text-gray-500 bg-[#faf8f5]">
+                        {property.status}
+                    </span>
 
-                <div className="flex items-center gap-2 text-gray-500">
-                    <MapPin size={16} />
+                    <span className="text-[11px] text-gray-400">
+                        {property.district}
+                    </span>
+                </div>
 
-                    <p>{property.location}</p>
+                <div className="space-y-3">
+                    <h1 className="font-serif text-5xl tracking-[-0.04em]">
+                        {property.title}
+                    </h1>
+
+                    <div className="flex items-center gap-2 text-gray-500">
+                        <MapPin size={16} />
+
+                        <p>{property.location}</p>
+                    </div>
                 </div>
             </div>
 
@@ -46,58 +89,120 @@ export default function Property() {
                 <PropertyActions property={property} />
             </div>
 
-            <div className="grid md:grid-cols-[1fr_420px] gap-16 items-start">
-                <div className="space-y-6">
-                    <p className="text-[11px] tracking-[0.28em] uppercase text-gray-400">
-                        Property Overview
-                    </p>
+            <div className="grid lg:grid-cols-[1fr_420px] gap-20 items-start">
+                <div className="space-y-14">
+                    <section className="space-y-6">
+                        <p className="text-[11px] tracking-[0.3em] uppercase text-gray-400">
+                            Property Overview
+                        </p>
 
-                    <p className="text-gray-600 leading-relaxed text-lg max-w-3xl">
-                        {property.description}
-                    </p>
+                        <p className="max-w-3xl text-xl leading-relaxed text-gray-600 whitespace-pre-line">
+                            {property.description}
+                        </p>
+                    </section>
+
+                    <section className="grid sm:grid-cols-2 gap-px border border-[#eee6dd] bg-[#eee6dd]">
+                        {secondaryDetails.map(([label, value]) => (
+                            <div
+                                key={label}
+                                className="bg-white px-6 py-5"
+                            >
+                                <p className="text-[11px] text-gray-400 mb-2">
+                                    {label}
+                                </p>
+
+                                <p className="font-serif text-2xl text-black">
+                                    {value}
+                                </p>
+                            </div>
+                        ))}
+                    </section>
+
+                    <section className="space-y-5">
+                        <p className="text-[11px] tracking-[0.3em] uppercase text-gray-400">
+                            Amenities
+                        </p>
+
+                        <div className="flex flex-wrap gap-3">
+                            {property.amenities.map((amenity) => (
+                                <span
+                                    key={amenity}
+                                    className="border border-[#eee6dd] bg-white px-5 py-2.5 text-sm text-gray-600"
+                                >
+                                    {amenity}
+                                </span>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="border border-[#eee6dd] bg-white p-7 flex items-center justify-between gap-8">
+                        <div>
+                            <p className="text-[11px] tracking-[0.3em] uppercase text-gray-400 mb-3">
+                                Contact Person
+                            </p>
+
+                            <p className="font-serif text-3xl text-black">
+                                {property.contactPerson.name}
+                            </p>
+                        </div>
+
+                        <div className="text-sm text-gray-500 space-y-2 text-right">
+                            <p>{property.contactPerson.phone}</p>
+                            <p>{property.contactPerson.email}</p>
+                        </div>
+                    </section>
                 </div>
 
-                <aside className="bg-white border border-[#eee6dd] p-8 space-y-8 shadow-[0_24px_70px_rgba(0,0,0,0.04)]">
-                    <div className="space-y-2">
-                        <p className="text-[11px] text-gray-400">
-                            Listing price
-                        </p>
+                <aside className="sticky top-24 border border-[#eee6dd] bg-[#faf8f5] p-8 space-y-8">
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[11px] tracking-[0.22em] uppercase text-gray-400">
+                                {property.status}
+                            </span>
+
+                            <span className="text-sm text-gray-400">
+                                {property.district}
+                            </span>
+                        </div>
 
                         <p className="font-serif text-5xl tracking-[-0.04em] text-black">
                             ${property.price.toLocaleString()}
                         </p>
                     </div>
 
-                    <div className="h-px bg-[#f1ece6]" />
+                    <div className="grid grid-cols-2 gap-px bg-[#e8e2da] border border-[#e8e2da]">
+                        {mainDetails.map(({ icon: Icon, label }) => (
+                            <div
+                                key={label}
+                                className="bg-[#faf8f5] p-5 space-y-3"
+                            >
+                                <Icon
+                                    size={18}
+                                    className="text-gray-400"
+                                />
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="border border-[#f1ece6] p-4 space-y-3">
-                            <BedDouble size={18} className="text-gray-400" />
-                            <p className="text-sm text-gray-900">
-                                {property.bedrooms} bedrooms
-                            </p>
-                        </div>
+                                <p className="text-sm text-gray-700 capitalize leading-relaxed">
+                                    {label}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
 
-                        <div className="border border-[#f1ece6] p-4 space-y-3">
-                            <Bath size={18} className="text-gray-400" />
-                            <p className="text-sm text-gray-900">
-                                {property.bathrooms} bathrooms
-                            </p>
-                        </div>
+                    <div className="space-y-4 border-t border-[#ece6dd] pt-6">
+                        {secondaryDetails.map(([label, value]) => (
+                            <div
+                                key={label}
+                                className="flex items-center justify-between text-sm"
+                            >
+                                <span className="text-gray-400">
+                                    {label}
+                                </span>
 
-                        <div className="border border-[#f1ece6] p-4 space-y-3">
-                            <Ruler size={18} className="text-gray-400" />
-                            <p className="text-sm text-gray-900">
-                                {property.size} m²
-                            </p>
-                        </div>
-
-                        <div className="border border-[#f1ece6] p-4 space-y-3">
-                            <Home size={18} className="text-gray-400" />
-                            <p className="text-sm text-gray-900 capitalize">
-                                {property.type}
-                            </p>
-                        </div>
+                                <span className="text-black">
+                                    {value}
+                                </span>
+                            </div>
+                        ))}
                     </div>
 
                     <button className="btn w-full">
