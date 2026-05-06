@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom"
 import { properties } from "../data/data"
 import Gallery from "../components/Gallery"
+import PropertyActions from "../components/PropertyActions"
 
 export default function Property() {
     const { id } = useParams()
@@ -13,12 +14,10 @@ export default function Property() {
     return (
         <div className="container py-16 space-y-12">
 
-            {/* TITLE */}
             <h1 className="font-serif text-5xl">
                 {property.title}
             </h1>
 
-            {/* LOCATION + TYPE */}
             <div className="space-y-1">
                 <p className="text-gray-500">
                     {property.location}
@@ -27,12 +26,15 @@ export default function Property() {
                 <p className="text-gray-400 text-sm capitalize">
                     {property.type}
                 </p>
+
             </div>
 
-            {/* GALLERY */}
             <Gallery images={property.images} />
 
-            {/* CONTENT */}
+            <div className="pt-2 border-t border-[#f1ece6]">
+                <PropertyActions property={property} />
+            </div>
+
             <div className="grid md:grid-cols-2 gap-12">
 
                 {/* DESCRIPTION */}
@@ -42,7 +44,6 @@ export default function Property() {
                     </p>
                 </div>
 
-                {/* FACTS CARD */}
                 <div className="card space-y-2">
 
                     <p className="text-black font-medium text-lg">
