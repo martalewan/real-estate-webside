@@ -1,12 +1,13 @@
 import FilterControls from "./FilterControls"
 import ActiveFilterChips from "./ActiveFilterChips"
 
-type FiltersState = {
+export type FiltersState = {
     city: string
     type: string
     priceMin: number | null
     priceMax: number | null
     bedrooms: number
+    sort: string
 }
 
 type FiltersProps = {

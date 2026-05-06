@@ -1,15 +1,7 @@
 import { useSearchParams } from "react-router-dom"
 import { properties, type Property } from "../data/data"
 import PropertyCard from "../components/PropertyCard"
-import Filters from "../components/Filters"
-
-type FiltersState = {
-    city: string
-    type: string
-    priceMin: number | null
-    priceMax: number | null
-    bedrooms: number
-}
+import Filters, { type FiltersState } from "../components/Filters"
 
 type FilterKey = keyof FiltersState
 
@@ -27,7 +19,8 @@ export default function Properties() {
             : null,
         bedrooms: searchParams.get("bedrooms")
             ? Number(searchParams.get("bedrooms"))
-            : 0
+            : 0,
+        sort: searchParams.get("sort") || "newest"
     }
 
     const cities = [
@@ -57,15 +50,34 @@ export default function Properties() {
         setSearchParams({})
     }
 
-    const filtered: Property[] = properties.filter((property) => {
-        return (
-            (!filters.city || property.location === filters.city) &&
-            (!filters.type || property.type === filters.type) &&
-            (!filters.priceMin || property.price >= filters.priceMin) &&
-            (!filters.priceMax || property.price <= filters.priceMax) &&
-            property.bedrooms >= filters.bedrooms
-        )
-    })
+    const filtered: Property[] = [...properties]
+        .filter((property) => {
+            return (
+                (!filters.city || property.location === filters.city) &&
+                (!filters.type || property.type === filters.type) &&
+                (!filters.priceMin || property.price >= filters.priceMin) &&
+                (!filters.priceMax || property.price <= filters.priceMax) &&
+                property.bedrooms >= filters.bedrooms
+            )
+        })
+        .sort((a, b) => {
+            switch (filters.sort) {
+                case "price-asc":
+                    return a.price - b.price
+
+                case "price-desc":
+                    return b.price - a.price
+
+                case "size-desc":
+                    return b.size - a.size
+
+                case "beds-desc":
+                    return b.bedrooms - a.bedrooms
+
+                default:
+                    return b.id - a.id
+            }
+        })
 
     return (
         <div className="container py-16 space-y-12">
@@ -88,6 +100,40 @@ export default function Properties() {
                 cities={cities}
                 types={types}
             />
+
+            <div className="flex items-center justify-between gap-6">
+                <p className="text-gray-500">
+                    {filtered.length} residences found
+                </p>
+
+                <select
+                    value={filters.sort}
+                    onChange={(e) =>
+                        updateFilter("sort", e.target.value)
+                    }
+                    className="px-4 py-3 bg-white border border-[#eee6dd] text-sm outline-none"
+                >
+                    <option value="newest">
+                        Newest
+                    </option>
+
+                    <option value="price-asc">
+                        Price: Low to High
+                    </option>
+
+                    <option value="price-desc">
+                        Price: High to Low
+                    </option>
+
+                    <option value="size-desc">
+                        Largest Residences
+                    </option>
+
+                    <option value="beds-desc">
+                        Most Bedrooms
+                    </option>
+                </select>
+            </div>
 
             <div className="grid md:grid-cols-3 gap-10">
                 {filtered.map((property) => (
