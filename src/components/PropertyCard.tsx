@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { BedDouble, Bath, Ruler } from "lucide-react"
 import useFavorites from "../hooks/useFavorites"
 
 type PropertyCardProps = {
@@ -43,7 +44,11 @@ export default function PropertyCard({
                     type="button"
                     onClick={() => toggle(id)}
                     className="absolute right-4 top-4 h-10 w-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-lg shadow-sm hover:bg-white transition"
-                    aria-label={saved ? "Remove from favorites" : "Save to favorites"}
+                    aria-label={
+                        saved
+                            ? "Remove from favorites"
+                            : "Save to favorites"
+                    }
                 >
                     {saved ? "♥" : "♡"}
                 </button>
@@ -51,25 +56,40 @@ export default function PropertyCard({
 
             <Link to={`/property/${id}`}>
                 <div className="pt-4 space-y-3">
-                    <div className="flex items-start justify-between gap-6">
-                        <h4 className="font-serif text-xl leading-snug text-gray-900">
+                    <div className="space-y-2">
+                        <h4 className="font-serif text-xl leading-snug text-gray-900 min-h-[56px]">
                             {title}
                         </h4>
 
-                        <span className="text-lg font-light text-gray-900 whitespace-nowrap">
-                            {price}
-                        </span>
+                        <div className="space-y-1">
+                            <p className="text-sm text-gray-500">
+                                {location}
+                            </p>
+
+                            <p className="text-base font-light text-gray-900">
+                                {price}
+                            </p>
+                        </div>
                     </div>
 
-                    <p className="text-sm text-gray-500">{location}</p>
+                    <div className="border-t border-[#f1ece6] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
 
-                    <div className="border-t border-[#f1ece6]" />
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                        <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1.5">
+                                <BedDouble size={14} />
+                                <span>{bedrooms}</span>
+                            </div>
 
-                    <div className="flex justify-between text-xs text-gray-500 tracking-wide">
-                        <div className="flex gap-4">
-                            <span>{bedrooms} bd</span>
-                            <span>{bathrooms} ba</span>
-                            <span>{size} m²</span>
+                            <div className="flex items-center gap-1.5">
+                                <Bath size={14} />
+                                <span>{bathrooms}</span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                                <Ruler size={14} />
+                                <span>{size} m²</span>
+                            </div>
                         </div>
 
                         <span className="capitalize text-gray-400">

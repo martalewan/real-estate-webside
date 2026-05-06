@@ -1,4 +1,12 @@
 import { useParams } from "react-router-dom"
+import {
+    BedDouble,
+    Bath,
+    Ruler,
+    MapPin,
+    Home
+} from "lucide-react"
+
 import { properties } from "../data/data"
 import Gallery from "../components/Gallery"
 import PropertyActions from "../components/PropertyActions"
@@ -19,19 +27,17 @@ export default function Property() {
     }
 
     return (
-        <div className="container py-16 space-y-12">
-            <h1 className="font-serif text-5xl">
-                {property.title}
-            </h1>
+        <div className="container py-16 space-y-14">
+            <div className="space-y-3">
+                <h1 className="font-serif text-5xl">
+                    {property.title}
+                </h1>
 
-            <div className="space-y-1">
-                <p className="text-gray-500">
-                    {property.location}
-                </p>
+                <div className="flex items-center gap-2 text-gray-500">
+                    <MapPin size={16} />
 
-                <p className="text-gray-400 text-sm capitalize">
-                    {property.type}
-                </p>
+                    <p>{property.location}</p>
+                </div>
             </div>
 
             <Gallery images={property.images} />
@@ -40,52 +46,64 @@ export default function Property() {
                 <PropertyActions property={property} />
             </div>
 
-            <div className="grid md:grid-cols-2 gap-12">
-                <div className="space-y-4">
-                    <p className="text-gray-600 leading-relaxed">
+            <div className="grid md:grid-cols-[1fr_420px] gap-16 items-start">
+                <div className="space-y-6">
+                    <p className="text-[11px] tracking-[0.28em] uppercase text-gray-400">
+                        Property Overview
+                    </p>
+
+                    <p className="text-gray-600 leading-relaxed text-lg max-w-3xl">
                         {property.description}
                     </p>
                 </div>
 
-                <div className="card space-y-2">
-                    <p className="text-black font-medium text-lg">
-                        ${property.price.toLocaleString()}
-                    </p>
-
-                    <div className="pt-2 space-y-1 text-gray-600">
-                        <p>
-                            <span className="text-gray-400">
-                                Bedrooms:
-                            </span>{" "}
-                            {property.bedrooms}
+                <aside className="bg-white border border-[#eee6dd] p-8 space-y-8 shadow-[0_24px_70px_rgba(0,0,0,0.04)]">
+                    <div className="space-y-2">
+                        <p className="text-[11px] text-gray-400">
+                            Listing price
                         </p>
 
-                        <p>
-                            <span className="text-gray-400">
-                                Bathrooms:
-                            </span>{" "}
-                            {property.bathrooms}
-                        </p>
-
-                        <p>
-                            <span className="text-gray-400">
-                                Area:
-                            </span>{" "}
-                            {property.size} m²
-                        </p>
-
-                        <p>
-                            <span className="text-gray-400">
-                                Type:
-                            </span>{" "}
-                            {property.type}
+                        <p className="font-serif text-5xl tracking-[-0.04em] text-black">
+                            ${property.price.toLocaleString()}
                         </p>
                     </div>
 
-                    <button className="btn mt-4">
+                    <div className="h-px bg-[#f1ece6]" />
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="border border-[#f1ece6] p-4 space-y-3">
+                            <BedDouble size={18} className="text-gray-400" />
+                            <p className="text-sm text-gray-900">
+                                {property.bedrooms} bedrooms
+                            </p>
+                        </div>
+
+                        <div className="border border-[#f1ece6] p-4 space-y-3">
+                            <Bath size={18} className="text-gray-400" />
+                            <p className="text-sm text-gray-900">
+                                {property.bathrooms} bathrooms
+                            </p>
+                        </div>
+
+                        <div className="border border-[#f1ece6] p-4 space-y-3">
+                            <Ruler size={18} className="text-gray-400" />
+                            <p className="text-sm text-gray-900">
+                                {property.size} m²
+                            </p>
+                        </div>
+
+                        <div className="border border-[#f1ece6] p-4 space-y-3">
+                            <Home size={18} className="text-gray-400" />
+                            <p className="text-sm text-gray-900 capitalize">
+                                {property.type}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button className="btn w-full">
                         Request Private Viewing
                     </button>
-                </div>
+                </aside>
             </div>
         </div>
     )
