@@ -7,46 +7,58 @@ export default function Nav() {
     const location = useLocation()
 
     return (
-        <header className="container py-10 flex justify-between items-center">
+        <header className="absolute top-0 left-0 w-full z-50">
+            <div className="container py-8 flex justify-between items-center">
+                <Link
+                    to="/"
+                    className="font-serif text-2xl tracking-[-0.04em] text-black"
+                >
+                    MEstates
+                </Link>
 
-            <div className="text-xs tracking-[0.3em] uppercase text-gray-500">
-                <Link to="/">Estates</Link>
+                <nav className="flex items-center gap-8 text-sm text-gray-600">
+                    <Link
+                        to="/properties"
+                        className="hover:text-black transition"
+                    >
+                        Properties
+                    </Link>
+
+                    {!user ? (
+                        <>
+                            <Link
+                                to="/login"
+                                onClick={() =>
+                                    setAuthFrom(location.pathname)
+                                }
+                            >
+                                Login
+                            </Link>
+
+                            <Link
+                                to="/register"
+                                onClick={() =>
+                                    setAuthFrom(location.pathname)
+                                }
+                            >
+                                Create account
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <span className="text-gray-500">
+                                {user.name || user.email}
+                            </span>
+
+                            <button
+                                onClick={signOut}
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )}
+                </nav>
             </div>
-
-            <nav className="flex gap-8 text-sm text-gray-600 items-center">
-
-                <Link to="/properties">Properties</Link>
-
-                {!user ? (
-                    <>
-                        <Link
-                            to="/login"
-                            onClick={() => setAuthFrom(location.pathname)}
-                        >
-                            Login
-                        </Link>
-
-                        <Link
-                            to="/register"
-                            onClick={() => setAuthFrom(location.pathname)}
-                        >
-                            Create account
-                        </Link>
-                    </>
-                ) : (
-                    <>
-                        <span className="text-gray-500">
-                            {user.name || user.email}
-                        </span>
-
-                        <button onClick={signOut}>
-                            Logout
-                        </button>
-                    </>
-                )}
-
-            </nav>
-
         </header>
     )
 }
