@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Nav() {
     return (
         <header className="container py-10 flex justify-between items-center">
@@ -6,7 +8,11 @@ export default function Nav() {
             </div>
 
             <nav className="flex gap-8 text-sm text-gray-600">
-                <a href="#">Properties</a>
+
+                <Link to="/properties">
+                    Properties
+                </Link>
+
                 <a href="#">Contact</a>
             </nav>
         </header>
