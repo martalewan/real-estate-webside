@@ -21,7 +21,10 @@ export default function PropertyGrid() {
                         location={p.location}
                         price={`$${p.price.toLocaleString()}`}
                         images={p.images}
-                    />
+                        bedrooms={p.bedrooms}
+                        bathrooms={p.bathrooms}
+                        size={p.size}
+                        type={p.type} />
                 ))}
 
             </div>
