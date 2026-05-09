@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: transparent;" viewBox="806.9 460.56 1086.2 878.88">
+<defs>
+<radialGradient id="radial-pattern-0" gradientUnits="userSpaceOnUse" cx="0" cy="0" fx="0" fy="0" r="1982.4" gradientTransform="matrix(1, 0, 0, 1, 1350, 900)">
+<stop offset="0" stop-color="rgb(99.92981%, 99.92981%, 99.92981%)" stop-opacity="1"/>
+<stop offset="0.25" stop-color="rgb(99.769592%, 99.769592%, 99.769592%)" stop-opacity="1"/>
+<stop offset="0.34375" stop-color="rgb(99.562073%, 99.562073%, 99.562073%)" stop-opacity="1"/>
+<stop offset="0.425781" stop-color="rgb(99.308777%, 99.308777%, 99.308777%)" stop-opacity="1"/>
+<stop offset="0.496094" stop-color="rgb(99.024963%, 99.024963%, 99.024963%)" stop-opacity="1"/>
+<stop offset="0.558594" stop-color="rgb(98.722839%, 98.722839%, 98.722839%)" stop-opacity="1"/>
+<stop offset="0.613281" stop-color="rgb(98.417664%, 98.417664%, 98.417664%)" stop-opacity="1"/>
+<stop offset="0.660156" stop-color="rgb(98.126221%, 98.126221%, 98.126221%)" stop-opacity="1"/>
+<stop offset="0.699219" stop-color="rgb(97.850037%, 97.850037%, 97.850037%)" stop-opacity="1"/>
+<stop offset="0.734375" stop-color="rgb(97.583008%, 97.583008%, 97.583008%)" stop-opacity="1"/>
+<stop offset="0.765625" stop-color="rgb(97.331238%, 97.331238%, 97.331238%)" stop-opacity="1"/>
+<stop offset="0.792969" stop-color="rgb(97.099304%, 97.099304%, 97.099304%)" stop-opacity="1"/>
+<stop offset="0.816406" stop-color="rgb(96.893311%, 96.893311%, 96.893311%)" stop-opacity="1"/>
+<stop offset="0.835938" stop-color="rgb(96.699524%, 96.699524%, 96.699524%)" stop-opacity="1"/>
+<stop offset="0.855469" stop-color="rgb(96.414185%, 96.414185%, 96.414185%)" stop-opacity="1"/>
+<stop offset="0.890625" stop-color="rgb(96.072388%, 96.072388%, 96.072388%)" stop-opacity="1"/>
+<stop offset="0.917969" stop-color="rgb(95.802307%, 95.802307%, 95.802307%)" stop-opacity="1"/>
+<stop offset="0.9375" stop-color="rgb(95.495605%, 95.495605%, 95.495605%)" stop-opacity="1"/>
+<stop offset="0.96875" stop-color="rgb(95.204163%, 95.204163%, 95.204163%)" stop-opacity="1"/>
+<stop offset="0.984375" stop-color="rgb(95.002747%, 95.002747%, 95.002747%)" stop-opacity="1"/>
+<stop offset="1" stop-color="rgb(94.900513%, 94.900513%, 94.900513%)" stop-opacity="1"/>
+</radialGradient>
+</defs>
+
+<path fill-rule="evenodd" fill="rgb(39.988708%, 39.988708%, 39.988708%)" fill-opacity="1" d="M 1760.199219 937.929688 L 1566.710938 1273.050781 L 1831.308594 1273.050781 L 1831.308594 691.148438 L 1893.101562 584.140625 L 1893.101562 1334.839844 L 1459.699219 1334.839844 L 1653.160156 999.714844 L 1581.820312 999.714844 L 1385.671875 1339.441406 L 1314.328125 1339.441406 L 1056.328125 892.59375 L 1056.328125 1334.839844 L 806.902344 1334.839844 L 806.902344 460.558594 C 902.039062 460.558594 997.160156 460.558594 1092.300781 460.558594 L 1350 906.910156 L 1607.691406 460.558594 L 1893.101562 460.558594 L 1653.148438 876.144531 L 1581.808594 876.144531 L 1786.078125 522.339844 L 1643.371094 522.339844 L 1350 1030.480469 L 1056.628906 522.339844 L 868.683594 522.339844 L 868.683594 1273.050781 L 994.550781 1273.050781 L 994.550781 662.011719 L 1350 1277.660156 L 1546.128906 937.929688 L 1760.199219 937.929688 "/>
+</svg>
