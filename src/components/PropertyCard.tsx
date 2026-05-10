@@ -54,7 +54,7 @@ export default function PropertyCard({
                 </button>
             </div>
 
-            <Link to={`/property/${id}`}>
+            <Link to={`/property/${id}`} className="no-link-effect block">
                 <div className="pt-4 space-y-3">
                     <div className="space-y-2">
                         <h4 className="font-serif text-xl leading-snug text-gray-900 min-h-[56px]">
