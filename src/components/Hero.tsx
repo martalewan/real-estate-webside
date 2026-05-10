@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 
 export default function Hero() {
     return (
-        <section className="container min-h-screen pt-36 pb-28 overflow-visible">
+        <section className="container min-h-screen pt-56 pb-28 overflow-visible">
             <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-24 items-center">
                 <div className="space-y-12">
                     <div className="space-y-7">

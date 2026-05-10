@@ -17,7 +17,7 @@ const navigation = [
 
 export default function Footer() {
     return (
-        <footer className="border-t border-[#eee6dd] mt-32">
+        <footer className="border-t border-[#eee6dd]">
             <div className="container py-20 space-y-16">
                 <div className="grid md:grid-cols-2 gap-16 items-start">
                     <div className="space-y-6 max-w-md">

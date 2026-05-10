@@ -1,3 +1,4 @@
+import ContactUs from "../components/ContactUs"
 import Hero from "../components/Hero"
 import PropertyGrid from "../components/PropertyGrid"
 import Stats from "../components/Stats"
@@ -11,6 +12,7 @@ export default function Home() {
             <PropertyGrid />
             <WhyUs />
             <Stats />
+            <ContactUs />
 
         </div>
     )
