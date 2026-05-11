@@ -51,27 +51,41 @@ function generateSeed(type: PropertyType, city: string, index: number): number {
 }
 
 function generateImages(seed: number, type: PropertyType): string[] {
-    const base = "https://images.unsplash.com/"
-
-    const typeStyle: Record<PropertyType, string> = {
-        villa: "photo-1600585154340-be6161a56a0c",
-        penthouse: "photo-1493809842364-78817add7ffb",
-        chalet: "photo-1519710164239-da123dc03ef4",
-        loft: "photo-1505691938895-1758d7feb511",
-        residence: "photo-1600047509807-ba8f99d2cdde"
+    const imagesByType: Record<PropertyType, string[]> = {
+        villa: [
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&auto=format&fit=crop&q=80"
+        ],
+        penthouse: [
+            "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600607688969-a5bfcd646154?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1200&auto=format&fit=crop&q=80"
+        ],
+        chalet: [
+            "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1200&auto=format&fit=crop&q=80"
+        ],
+        loft: [
+            "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&auto=format&fit=crop&q=80"
+        ],
+        residence: [
+            "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=1200&auto=format&fit=crop&q=80"
+        ]
     }
 
-    const imageIds = [
-        typeStyle[type],
-        "photo-1502005229762-cf1b2da7c5d6",
-        "photo-1507089947368-19c1da9775ae",
-        "photo-1512917774080-1506263e2d87"
+    const images = imagesByType[type]
+
+    return [
+        images[seed % images.length],
+        images[(seed + 1) % images.length],
+        images[(seed + 2) % images.length]
     ]
-
-    const pick = (index: number) =>
-        `${base}${imageIds[(seed + index) % imageIds.length]}?w=1200&auto=format&fit=crop`
-
-    return [pick(0), pick(1), pick(2)]
 }
 
 function generateTitle(
