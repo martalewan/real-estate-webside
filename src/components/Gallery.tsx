@@ -1,27 +1,26 @@
-import { useState } from "react"
-import GalleryThumbs from "./GalleryThumbs"
-import Lightbox from "./Lightbox"
+import { useState } from "react";
+import type { MouseEvent } from "react";
+import GalleryThumbs from "./GalleryThumbs";
+import Lightbox from "./Lightbox";
 
 type GalleryProps = {
-    images?: string[]
-}
+    images?: string[];
+};
 
-export default function Gallery({
-    images = []
-}: GalleryProps) {
-    const [activeIndex, setActiveIndex] = useState<number | null>(null)
+type LightboxActionEvent =
+    | MouseEvent<HTMLButtonElement>
+    | globalThis.KeyboardEvent;
 
-    if (!images.length) return null
+export default function Gallery({ images = [] }: GalleryProps) {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+    if (!images.length) return null;
 
     const activeImage =
-        activeIndex !== null
-            ? images[activeIndex]
-            : null
+        activeIndex !== null ? images[activeIndex] : null;
 
-    const next = (
-        e: React.MouseEvent<HTMLButtonElement>
-    ) => {
-        e.stopPropagation()
+    const next = (e: LightboxActionEvent) => {
+        e.stopPropagation();
 
         setActiveIndex((prev) =>
             prev === null
@@ -29,13 +28,11 @@ export default function Gallery({
                 : prev === images.length - 1
                     ? 0
                     : prev + 1
-        )
-    }
+        );
+    };
 
-    const prev = (
-        e: React.MouseEvent<HTMLButtonElement>
-    ) => {
-        e.stopPropagation()
+    const prev = (e: LightboxActionEvent) => {
+        e.stopPropagation();
 
         setActiveIndex((prev) =>
             prev === null
@@ -43,8 +40,8 @@ export default function Gallery({
                 : prev === 0
                     ? images.length - 1
                     : prev - 1
-        )
-    }
+        );
+    };
 
     return (
         <div className="space-y-4">
@@ -77,5 +74,5 @@ export default function Gallery({
                 />
             )}
         </div>
-    )
+    );
 }

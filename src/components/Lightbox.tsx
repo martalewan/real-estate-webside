@@ -3,17 +3,17 @@ import { useZoomPan } from "../hooks/useZoomPan"
 
 const SCALE = 2.5
 
+type LightboxActionEvent =
+    | React.MouseEvent<HTMLButtonElement>
+    | globalThis.KeyboardEvent;
+
 type LightboxProps = {
     image: string
-    activeIndex: number
+    activeIndex: number | null
     total: number
     onClose: () => void
-    onNext: (
-        e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
-    ) => void
-    onPrev: (
-        e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent
-    ) => void
+    onNext: (e: LightboxActionEvent) => void;
+    onPrev: (e: LightboxActionEvent) => void;
 }
 
 export default function Lightbox({
@@ -96,9 +96,11 @@ export default function Lightbox({
                     ›
                 </button>
 
-                <div className="absolute bottom-5 right-5 text-white bg-black/40 px-3 py-1 rounded-full">
-                    {activeIndex + 1} / {total}
-                </div>
+                {activeIndex !== null && (
+                    <div className="absolute bottom-5 right-5 text-white bg-black/40 px-3 py-1 rounded-full">
+                        {activeIndex + 1} / {total}
+                    </div>
+                )}
             </div>
         </div>
     )

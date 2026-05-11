@@ -1,7 +1,7 @@
 const USER_KEY = "user"
 
 export type User = {
-    id: number
+    id: string
     name?: string
     email: string
 }

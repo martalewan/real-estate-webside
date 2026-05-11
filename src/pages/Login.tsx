@@ -13,10 +13,13 @@ export default function Login() {
         password: ""
     })
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (
+        e: React.SyntheticEvent<HTMLFormElement>
+    ) => {
         e.preventDefault()
 
         signIn({
+            id: crypto.randomUUID(),
             email: form.email,
             name: "User"
         })

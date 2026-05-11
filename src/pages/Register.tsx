@@ -31,7 +31,7 @@ export default function Register() {
         signIn({
             email: form.email,
             name: form.name,
-            id: Date.now()
+            id: crypto.randomUUID(),
         })
 
         const from = getAuthFrom()
