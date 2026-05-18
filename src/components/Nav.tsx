@@ -20,6 +20,7 @@ export default function Nav() {
                 </Link>
 
                 <nav className="flex items-center gap-8 text-sm text-gray-600">
+
                     <Link
                         to="/properties"
                         className="hover:text-black transition"

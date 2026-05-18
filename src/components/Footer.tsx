@@ -35,7 +35,7 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-12 text-sm">
+                    <div className="grid grid-cols-2 gap-2 text-sm">
                         <div className="space-y-5">
                             <p className="text-xs tracking-[0.25em] uppercase text-gray-400">
                                 Navigation
