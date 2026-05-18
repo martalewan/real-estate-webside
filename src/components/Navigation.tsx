@@ -238,6 +238,18 @@ export default function Header() {
                                                     }
                                                 )
                                             }
+                                            onTouchStart={() =>
+                                                setSelectedLink({
+                                                    isActive: true,
+                                                    index,
+                                                })
+                                            }
+                                            onTouchEnd={() =>
+                                                setSelectedLink({
+                                                    isActive: false,
+                                                    index,
+                                                })
+                                            }
                                         >
                                             {link.href.startsWith(
                                                 "#"
