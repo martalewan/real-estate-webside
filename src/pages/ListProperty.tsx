@@ -196,7 +196,7 @@ export default function ListProperty() {
     return (
         <div className="container pt-32 pb-20">
             <div className="grid lg:grid-cols-[0.78fr_1.22fr] gap-20 items-start">
-                <div className="space-y-6 sticky top-32">
+                <div className="space-y-6 block md:sticky top-32">
                     <p className="text-[11px] tracking-[0.34em] uppercase text-gray-400">
                         List Property
                     </p>
@@ -467,8 +467,8 @@ export default function ListProperty() {
                                         )
                                     }
                                     className={`border px-5 py-4 text-sm transition ${form.furnished
-                                            ? "border-black bg-black text-white"
-                                            : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
+                                        ? "border-black bg-black text-white"
+                                        : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
                                         }`}
                                 >
                                     Furnished
@@ -483,8 +483,8 @@ export default function ListProperty() {
                                         )
                                     }
                                     className={`border px-5 py-4 text-sm transition ${!form.furnished
-                                            ? "border-black bg-black text-white"
-                                            : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
+                                        ? "border-black bg-black text-white"
+                                        : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
                                         }`}
                                 >
                                     Unfurnished
@@ -518,8 +518,8 @@ export default function ListProperty() {
                                                 )
                                             }
                                             className={`border px-4 py-3 text-sm text-left transition ${selected
-                                                    ? "border-black bg-black text-white"
-                                                    : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
+                                                ? "border-black bg-black text-white"
+                                                : "border-[#eee6dd] bg-white text-gray-500 hover:text-black"
                                                 }`}
                                         >
                                             {amenity}

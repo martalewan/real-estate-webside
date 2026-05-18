@@ -15,7 +15,7 @@ const contactDetails = [
 
 export default function ContactUs() {
     return (
-        <section className="container py-24 border-t border-[#eee6dd]">
+        <section className="container py-24 border-t border-[#eee6dd]" id="contact">
             <div className="grid lg:grid-cols-2 gap-16 items-start">
                 <div className="max-w-xl">
                     <p className="text-xs tracking-[0.3em] uppercase text-gray-400 mb-4">

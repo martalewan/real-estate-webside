@@ -21,7 +21,7 @@ const items = [
 
 export default function WhyUs() {
     return (
-        <section className="container py-24">
+        <section className="container py-24" id="about">
             <div className="mb-14 max-w-2xl">
                 <p className="text-xs tracking-[0.3em] uppercase text-gray-400 mb-4">
                     Why Estates
