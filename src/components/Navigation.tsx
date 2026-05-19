@@ -363,6 +363,10 @@ export default function Header() {
 
                                     <Link
                                         to="/favorites"
+                                        onClick={() => {
+                                            setAuthFrom(location.pathname)
+                                            setIsActive(false)
+                                        }}
                                         className="flex items-center gap-2 transition hover:text-black"
                                     >
                                         Favorites
@@ -382,11 +386,10 @@ export default function Header() {
                                     {!user ? (
                                         <Link
                                             to="/login"
-                                            onClick={() =>
-                                                setAuthFrom(
-                                                    location.pathname
-                                                )
-                                            }
+                                            onClick={() => {
+                                                setAuthFrom(location.pathname)
+                                                setIsActive(false)
+                                            }}
                                             className="flex items-center transition hover:text-black"
                                         >
                                             Login
@@ -399,9 +402,10 @@ export default function Header() {
                                             </span>
 
                                             <button
-                                                onClick={
-                                                    signOut
-                                                }
+                                                onClick={() => {
+                                                    signOut()
+                                                    setIsActive(false)
+                                                }}
                                                 className="text-left transition hover:text-black"
                                             >
                                                 Logout
@@ -414,6 +418,6 @@ export default function Header() {
                     </motion.nav>
                 )}
             </AnimatePresence>
-        </header>
+        </header >
     )
 }
