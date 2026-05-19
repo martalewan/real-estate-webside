@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
 import dotenv from "dotenv"
+import { properties, Property } from "./data.js"
 
 dotenv.config()
 
@@ -10,72 +11,20 @@ const PORT = process.env.PORT || 5001
 app.use(cors())
 app.use(express.json())
 
-type PropertyType = "villa" | "penthouse" | "chalet" | "loft" | "residence"
-type PropertyStatus = "For Sale" | "New Listing" | "Exclusive"
-type EnergyRating = "A" | "B" | "C"
-
-type Property = {
-    id: number
-    type: PropertyType
-    status: PropertyStatus
-    location: string
-    district: string
-    title: string
-    price: number
-    bedrooms: number
-    bathrooms: number
-    size: number
-    outdoorSize: number
-    yearBuilt: number
-    parkingSpaces: number
-    energyRating: EnergyRating
-    furnished: boolean
-    amenities: string[]
-    contactPerson: {
-        name: string
-        phone: string
-        email: string
-    }
-    images: string[]
-    description: string
-}
-
-const properties: Property[] = [
-    {
-        id: 1,
-        type: "villa",
-        status: "For Sale",
-        location: "Marbella, Spain",
-        district: "Golden Mile",
-        title: "Elegant Villa in Marbella",
-        price: 2400000,
-        bedrooms: 5,
-        bathrooms: 4,
-        size: 420,
-        outdoorSize: 180,
-        yearBuilt: 2021,
-        parkingSpaces: 2,
-        energyRating: "A",
-        furnished: true,
-        amenities: ["Private pool", "Garden", "Terrace", "Garage", "Security"],
-        contactPerson: {
-            name: "Marta Lewandowska",
-            phone: "+33 6 24 18 90 42",
-            email: "marta@example.com"
-        },
-        images: [
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=80"
-        ],
-        description: "A luxury villa with sea views, private pool and modern interiors."
-    }
-]
-
 app.get("/", (_req: Request, res: Response) => {
     res.send("Estates API is running")
 })
 
 app.get("/api/properties", (req: Request, res: Response<Property[]>) => {
-    const { type, status, location, minPrice, maxPrice } = req.query
+    const {
+        type,
+        status,
+        location,
+        minPrice,
+        maxPrice,
+        bedrooms,
+        bathrooms
+    } = req.query
 
     let filtered = [...properties]
 
@@ -87,7 +36,8 @@ app.get("/api/properties", (req: Request, res: Response<Property[]>) => {
 
     if (status) {
         filtered = filtered.filter(
-            property => property.status.toLowerCase() === String(status).toLowerCase()
+            property =>
+                property.status.toLowerCase() === String(status).toLowerCase()
         )
     }
 
@@ -105,6 +55,14 @@ app.get("/api/properties", (req: Request, res: Response<Property[]>) => {
 
     if (maxPrice) {
         filtered = filtered.filter(property => property.price <= Number(maxPrice))
+    }
+
+    if (bedrooms) {
+        filtered = filtered.filter(property => property.bedrooms >= Number(bedrooms))
+    }
+
+    if (bathrooms) {
+        filtered = filtered.filter(property => property.bathrooms >= Number(bathrooms))
     }
 
     res.json(filtered)
