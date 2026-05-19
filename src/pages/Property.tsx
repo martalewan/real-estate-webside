@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import type { LucideIcon } from "lucide-react"
 import type { Property } from "../../backend/src/data.js"
 
@@ -255,7 +255,9 @@ export default function Property() {
                     <button className="btn w-full">
                         Request Private Viewing
                     </button>
-
+                    <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
+                        Edit Property
+                    </Link>
                 </aside>
 
             </div>

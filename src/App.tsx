@@ -20,6 +20,7 @@ export default function App() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/:id" element={<Property />} />
+        <Route path="/properties/:id/edit" element={<ListProperty />} />
       </Route>
     </Routes>
   )

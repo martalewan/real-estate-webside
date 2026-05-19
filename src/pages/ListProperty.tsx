@@ -1,7 +1,11 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 
-import { createProperty } from "../api/properties"
+import {
+    createProperty,
+    getProperty,
+    updateProperty
+} from "../api/properties"
 import type { Property } from "../../backend/src/data"
 import PropertyDetailsSection from "../components/PropertyDetailsSection"
 import AmenitiesSection from "../components/AmenitiesSection"
@@ -9,7 +13,6 @@ import ImagesSection from "../components/ImageSection"
 import SpecificationsSection from "../components/SpecificationsSection"
 import DescriptionSection from "../components/DescriptionSection"
 import ContactSection from "../components/ContactSection"
-
 
 export type PropertyForm = {
     title: string
@@ -61,9 +64,41 @@ const initialForm: PropertyForm = {
 
 export default function ListProperty() {
     const navigate = useNavigate()
+    const { id } = useParams<{ id: string }>()
+    const isEditing = Boolean(id)
 
     const [form, setForm] = useState<PropertyForm>(initialForm)
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (!id) return
+
+        getProperty(Number(id)).then((property) => {
+            setForm({
+                title: property.title,
+                location: property.location,
+                district: property.district,
+                type: property.type,
+                status: property.status,
+                price: String(property.price),
+                bedrooms: String(property.bedrooms),
+                bathrooms: String(property.bathrooms),
+                size: String(property.size),
+                outdoorSize: String(property.outdoorSize),
+                yearBuilt: String(property.yearBuilt),
+                parkingSpaces: String(property.parkingSpaces),
+                energyRating: property.energyRating,
+                furnished: property.furnished,
+                amenities: property.amenities,
+                description: property.description,
+                mainImage: property.images[0] || "",
+                galleryImages: property.images.slice(1),
+                contactName: property.contactPerson.name,
+                contactEmail: property.contactPerson.email,
+                contactPhone: property.contactPerson.phone
+            })
+        })
+    }, [id])
 
     const updateField = (
         key: keyof PropertyForm,
@@ -135,7 +170,7 @@ export default function ListProperty() {
         try {
             setLoading(true)
 
-            const newProperty = await createProperty({
+            const propertyData = await createProperty({
                 title: form.title,
                 location: form.location,
                 district: form.district,
@@ -164,7 +199,11 @@ export default function ListProperty() {
                 }
             })
 
-            navigate(`/properties/${newProperty.id}`)
+            const savedProperty = isEditing && id
+                ? await updateProperty(Number(id), propertyData)
+                : await createProperty(propertyData)
+
+            navigate(`/properties/${savedProperty.id}`)
         } catch (error) {
             console.error(error)
         } finally {
@@ -231,8 +270,8 @@ export default function ListProperty() {
                         disabled={loading}
                     >
                         {loading
-                            ? "Publishing..."
-                            : "Publish Listing"}
+                            ? isEditing ? "Updating..." : "Publishing..."
+                            : isEditing ? "Update Listing" : "Publish Listing"}
                     </button>
 
                 </form>
