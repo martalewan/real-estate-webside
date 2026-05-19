@@ -1,12 +1,23 @@
+import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import { properties, type Property } from "../data/data"
+import { getProperties } from "../api/properties"
 import PropertyCard from "../components/PropertyCard"
 import Filters, { type FiltersState } from "../components/Filters"
+import type { Property } from "../../backend/src/data"
 
 type FilterKey = keyof FiltersState
 
 export default function Properties() {
     const [searchParams, setSearchParams] = useSearchParams()
+    const [properties, setProperties] = useState<Property[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        getProperties()
+            .then(setProperties)
+            .catch(console.error)
+            .finally(() => setLoading(false))
+    }, [])
 
     const filters: FiltersState = {
         city: searchParams.get("city") || "",
@@ -23,13 +34,8 @@ export default function Properties() {
         sort: searchParams.get("sort") || "newest"
     }
 
-    const cities = [
-        ...new Set(properties.map((property) => property.location))
-    ]
-
-    const types = [
-        ...new Set(properties.map((property) => property.type))
-    ]
+    const cities = [...new Set(properties.map((property) => property.location))]
+    const types = [...new Set(properties.map((property) => property.type))]
 
     const updateFilter = (
         key: FilterKey,
@@ -64,20 +70,20 @@ export default function Properties() {
             switch (filters.sort) {
                 case "price-asc":
                     return a.price - b.price
-
                 case "price-desc":
                     return b.price - a.price
-
                 case "size-desc":
                     return b.size - a.size
-
                 case "beds-desc":
                     return b.bedrooms - a.bedrooms
-
                 default:
                     return b.id - a.id
             }
         })
+
+    if (loading) {
+        return <div className="container py-16">Loading properties...</div>
+    }
 
     return (
         <div className="container py-16 space-y-12">
@@ -108,30 +114,14 @@ export default function Properties() {
 
                 <select
                     value={filters.sort}
-                    onChange={(e) =>
-                        updateFilter("sort", e.target.value)
-                    }
+                    onChange={(e) => updateFilter("sort", e.target.value)}
                     className="px-4 py-3 bg-white border border-[#eee6dd] text-sm outline-none"
                 >
-                    <option value="newest">
-                        Newest
-                    </option>
-
-                    <option value="price-asc">
-                        Price: Low to High
-                    </option>
-
-                    <option value="price-desc">
-                        Price: High to Low
-                    </option>
-
-                    <option value="size-desc">
-                        Largest Residences
-                    </option>
-
-                    <option value="beds-desc">
-                        Most Bedrooms
-                    </option>
+                    <option value="newest">Newest</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="size-desc">Largest Residences</option>
+                    <option value="beds-desc">Most Bedrooms</option>
                 </select>
             </div>
 
