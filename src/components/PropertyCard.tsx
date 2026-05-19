@@ -31,7 +31,7 @@ export default function PropertyCard({
     return (
         <div className="group">
             <div className="relative overflow-hidden border border-[#e8e2da] bg-white">
-                <Link to={`/property/${id}`}>
+                <Link to={`/properties/${id}`}>
                     <img
                         src={images?.[0]}
                         alt={title}
@@ -54,7 +54,7 @@ export default function PropertyCard({
                 </button>
             </div>
 
-            <Link to={`/property/${id}`} className="no-link-effect block">
+            <Link to={`/properties/${id}`} className="no-link-effect block">
                 <div className="pt-4 space-y-3">
                     <div className="space-y-2">
                         <h4 className="font-serif text-xl leading-snug text-gray-900 min-h-[56px]">

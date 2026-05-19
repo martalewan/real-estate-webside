@@ -19,7 +19,7 @@ export default function App() {
         <Route path="/add-property" element={<ListProperty />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/properties" element={<Properties />} />
-        <Route path="/property/:id" element={<Property />} />
+        <Route path="/properties/:id" element={<Property />} />
       </Route>
     </Routes>
   )

@@ -21,3 +21,19 @@ export async function getProperty(id: number): Promise<Property> {
 
     return response.json()
 }
+
+export async function createProperty(property: Omit<Property, "id">): Promise<Property> {
+    const response = await fetch(`${API_URL}/api/properties`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(property)
+    })
+
+    if (!response.ok) {
+        throw new Error("Failed to create property")
+    }
+
+    return response.json()
+}
