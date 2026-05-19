@@ -252,12 +252,15 @@ export default function Property() {
 
                     </div>
 
-                    <button className="btn w-full">
-                        Request Private Viewing
-                    </button>
-                    <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
-                        Edit Property
-                    </Link>
+                    <div className="flex flex-col gap-3">
+                        <button className="btn w-full">
+                            Request Private Viewing
+                        </button>
+                        <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
+                            Edit Property
+                        </Link>
+                    </div>
+
                 </aside>
 
             </div>
