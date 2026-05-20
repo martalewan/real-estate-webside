@@ -22,6 +22,7 @@ const links = [
     { title: "Contact", href: "#contact" },
     { title: "Properties", href: "/properties" },
     { title: "List Property", href: "/add-property" },
+    { title: "My Properties", href: "/my-properties" }
 
 ]
 

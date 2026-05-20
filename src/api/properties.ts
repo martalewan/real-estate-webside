@@ -76,3 +76,20 @@ export async function deleteProperty(id: number) {
 
     return response.json()
 }
+
+export async function getMyProperties(): Promise<Property[]> {
+    const response = await fetch(`${API_URL}/api/properties`, {
+        headers: getAuthHeaders()
+    })
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch my properties")
+    }
+
+    const properties: Property[] = await response.json()
+    const user = JSON.parse(localStorage.getItem("user") || "null")
+
+    return properties.filter(
+        (property) => property.ownerId === user?.id
+    )
+}

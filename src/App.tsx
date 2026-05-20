@@ -7,6 +7,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Favorites from "./pages/Favorites"
 import ListProperty from "./pages/ListProperty"
+import MyProperties from "./pages/MyProperties"
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/:id" element={<Property />} />
         <Route path="/properties/:id/edit" element={<ListProperty />} />
+        <Route path="/my-properties" element={<MyProperties />} />
       </Route>
     </Routes>
   )
