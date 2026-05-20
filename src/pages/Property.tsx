@@ -274,7 +274,7 @@ export default function Property() {
                         <button className="btn w-full">
                             Request Private Viewing
                         </button>
-                        {user && (
+                        {user && Number(user.id) === property.ownerId && (
                             <>
                                 <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
                                     Edit Property

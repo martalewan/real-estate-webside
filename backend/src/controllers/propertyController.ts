@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import { properties, type Property } from "../data.js"
+import type { AuthRequest } from "../middleware/authMiddleware.js"
 
 export function getProperties(req: Request, res: Response<Property[]>) {
     const {
@@ -66,10 +67,11 @@ export function getProperty(req: Request, res: Response) {
     res.json(property)
 }
 
-export function createProperty(req: Request, res: Response) {
+export function createProperty(req: AuthRequest, res: Response) {
     const newProperty: Property = {
         ...req.body,
-        id: properties.length + 1
+        id: properties.length + 1,
+        ownerId: req.user?.id
     }
 
     properties.push(newProperty)
@@ -77,7 +79,7 @@ export function createProperty(req: Request, res: Response) {
     res.status(201).json(newProperty)
 }
 
-export function updateProperty(req: Request, res: Response) {
+export function updateProperty(req: AuthRequest, res: Response) {
     const propertyId = Number(req.params.id)
 
     const index = properties.findIndex(
@@ -101,7 +103,7 @@ export function updateProperty(req: Request, res: Response) {
     res.json(updatedProperty)
 }
 
-export function deleteProperty(req: Request, res: Response) {
+export function deleteProperty(req: AuthRequest, res: Response) {
     const propertyId = Number(req.params.id)
 
     const index = properties.findIndex(

@@ -1,11 +1,15 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+
 import AuthLayout from "../layouts/AuthLayout"
 import useAuth from "../hooks/useAuth"
+
 import {
     getAuthFrom,
     clearAuthFrom
 } from "../helpers/authRedirect"
+
+import { registerUser, loginUser } from "../api/auth"
 
 type RegisterForm = {
     name: string
@@ -23,22 +27,52 @@ export default function Register() {
         password: ""
     })
 
-    const handleSubmit = (
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
+
+    const handleSubmit = async (
         e: React.FormEvent<HTMLFormElement>
     ) => {
         e.preventDefault()
 
-        signIn({
-            email: form.email,
-            name: form.name,
-            id: crypto.randomUUID(),
-        })
+        try {
+            setLoading(true)
+            setError("")
 
-        const from = getAuthFrom()
+            await registerUser({
+                name: form.name,
+                email: form.email,
+                password: form.password
+            })
 
-        clearAuthFrom()
+            const data = await loginUser({
+                email: form.email,
+                password: form.password
+            })
 
-        navigate(from)
+            localStorage.setItem(
+                "token",
+                data.token
+            )
+
+            localStorage.setItem(
+                "user",
+                JSON.stringify(data.user)
+            )
+
+            signIn(data.user)
+
+            const from = getAuthFrom()
+
+            clearAuthFrom()
+
+            navigate(from)
+
+        } catch {
+            setError("Failed to create account.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -46,10 +80,12 @@ export default function Register() {
             title="Create account"
             subtitle="Join the platform"
         >
+
             <form
                 onSubmit={handleSubmit}
                 className="space-y-4"
             >
+
                 <input
                     type="text"
                     placeholder="Name"
@@ -61,6 +97,7 @@ export default function Register() {
                             name: e.target.value
                         })
                     }
+                    required
                 />
 
                 <input
@@ -74,6 +111,7 @@ export default function Register() {
                             email: e.target.value
                         })
                     }
+                    required
                 />
 
                 <input
@@ -87,10 +125,22 @@ export default function Register() {
                             password: e.target.value
                         })
                     }
+                    required
                 />
 
-                <button className="btn w-full">
-                    Create account
+                {error && (
+                    <p className="text-sm text-red-500">
+                        {error}
+                    </p>
+                )}
+
+                <button
+                    className="btn w-full"
+                    disabled={loading}
+                >
+                    {loading
+                        ? "Creating account..."
+                        : "Create account"}
                 </button>
 
                 <button
@@ -102,7 +152,9 @@ export default function Register() {
                 >
                     Cancel
                 </button>
+
             </form>
+
         </AuthLayout>
     )
 }

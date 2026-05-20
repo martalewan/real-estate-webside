@@ -14,6 +14,7 @@ export type EnergyRating = "A" | "B" | "C"
 
 export type Property = {
     id: number
+    ownerId?: number,
     type: PropertyType
     status: PropertyStatus
     location: string
