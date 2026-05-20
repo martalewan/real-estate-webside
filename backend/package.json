@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "tsx src/server.ts"
+    "start": "tsx src/server.ts",
+    "seed": "tsx src/seeds/seedProperties.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
