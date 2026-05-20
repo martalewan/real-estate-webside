@@ -2,6 +2,15 @@ import type { Property } from "../../backend/src/data.js"
 
 const API_URL = "http://localhost:5001"
 
+function getAuthHeaders() {
+    const token = localStorage.getItem("token")
+
+    return {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+    }
+}
+
 export async function getProperties(): Promise<Property[]> {
     const response = await fetch(`${API_URL}/api/properties`)
 
@@ -22,12 +31,12 @@ export async function getProperty(id: number): Promise<Property> {
     return response.json()
 }
 
-export async function createProperty(property: Omit<Property, "id">): Promise<Property> {
+export async function createProperty(
+    property: Omit<Property, "id">
+): Promise<Property> {
     const response = await fetch(`${API_URL}/api/properties`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(property)
     })
 
@@ -44,9 +53,7 @@ export async function updateProperty(
 ): Promise<Property> {
     const response = await fetch(`${API_URL}/api/properties/${id}`, {
         method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(property)
     })
 
@@ -58,12 +65,10 @@ export async function updateProperty(
 }
 
 export async function deleteProperty(id: number) {
-    const response = await fetch(
-        `${API_URL}/api/properties/${id}`,
-        {
-            method: "DELETE"
-        }
-    )
+    const response = await fetch(`${API_URL}/api/properties/${id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders()
+    })
 
     if (!response.ok) {
         throw new Error("Failed to delete property")

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import AuthLayout from "../layouts/AuthLayout"
 import useAuth from "../hooks/useAuth"
 import { getAuthFrom, clearAuthFrom } from "../helpers/authRedirect"
+import { loginUser } from "../api/auth"
 
 export default function Login() {
     const navigate = useNavigate()
@@ -13,28 +14,42 @@ export default function Login() {
         password: ""
     })
 
-    const handleSubmit = (
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const handleSubmit = async (
         e: React.SyntheticEvent<HTMLFormElement>
     ) => {
         e.preventDefault()
 
-        signIn({
-            id: crypto.randomUUID(),
-            email: form.email,
-            name: "User"
-        })
+        try {
+            setLoading(true)
+            setError("")
 
-        const from = getAuthFrom()
-        clearAuthFrom()
+            const data = await loginUser({
+                email: form.email,
+                password: form.password
+            })
 
-        navigate(from)
+            localStorage.setItem("token", data.token)
+            localStorage.setItem("user", JSON.stringify(data.user))
+
+            signIn(data.user)
+
+            const from = getAuthFrom()
+            clearAuthFrom()
+
+            navigate(from)
+        } catch {
+            setError("Invalid email or password.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
         <AuthLayout title="Welcome back" subtitle="Sign in to your account">
-
             <form onSubmit={handleSubmit} className="space-y-4">
-
                 <input
                     type="email"
                     placeholder="Email"
@@ -43,6 +58,7 @@ export default function Login() {
                     onChange={(e) =>
                         setForm({ ...form, email: e.target.value })
                     }
+                    required
                 />
 
                 <input
@@ -53,10 +69,17 @@ export default function Login() {
                     onChange={(e) =>
                         setForm({ ...form, password: e.target.value })
                     }
+                    required
                 />
 
-                <button className="btn w-full">
-                    Sign in
+                {error && (
+                    <p className="text-sm text-red-500">
+                        {error}
+                    </p>
+                )}
+
+                <button className="btn w-full" disabled={loading}>
+                    {loading ? "Signing in..." : "Sign in"}
                 </button>
 
                 <button
@@ -66,7 +89,6 @@ export default function Login() {
                 >
                     Cancel
                 </button>
-
             </form>
 
             <p className="text-sm text-center text-gray-500">
@@ -75,7 +97,6 @@ export default function Login() {
                     Create one
                 </Link>
             </p>
-
         </AuthLayout>
     )
 }

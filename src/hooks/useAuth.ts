@@ -25,6 +25,8 @@ export default function useAuth(): UseAuthReturn {
     }
 
     const signOut = (): void => {
+        localStorage.removeItem("token")
+
         clearUser()
         setUserState(null)
     }

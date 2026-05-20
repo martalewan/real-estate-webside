@@ -18,10 +18,12 @@ import { getProperty } from "../api/properties"
 import Gallery from "../components/Gallery"
 import PropertyActions from "../components/PropertyActions"
 import ConfirmModal from "../components/ConfirmModal.js"
+import useAuth from "../hooks/useAuth.js"
 
 export default function Property() {
     const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
+    const { user } = useAuth()
     const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [property, setProperty] = useState<Property | null>(null)
     const [loading, setLoading] = useState(true)
@@ -272,15 +274,19 @@ export default function Property() {
                         <button className="btn w-full">
                             Request Private Viewing
                         </button>
-                        <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
-                            Edit Property
-                        </Link>
-                        <button
-                            onClick={() => setShowDeleteModal(true)}
-                            className="hiddenrounded-xl w-full border border-red-500 text-red-500 py-2 hover:bg-red-500 hover:text-white transition"
-                        >
-                            Delete Property
-                        </button>
+                        {user && (
+                            <>
+                                <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
+                                    Edit Property
+                                </Link>
+                                <button
+                                    onClick={() => setShowDeleteModal(true)}
+                                    className="rounded-xl w-full border border-red-500 text-red-500 py-2 hover:bg-red-500 hover:text-white transition"
+                                >
+                                    Delete Property
+                                </button>
+                            </>
+                        )}
                     </div>
 
                 </aside>

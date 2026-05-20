@@ -8,12 +8,15 @@ import {
     deleteProperty
 } from "../controllers/propertyController.js"
 
+import { protect } from "../middleware/authMiddleware.js"
+
 const router = express.Router()
 
 router.get("/", getProperties)
 router.get("/:id", getProperty)
-router.post("/", createProperty)
-router.put("/:id", updateProperty)
-router.delete("/:id", deleteProperty)
+
+router.post("/", protect, createProperty)
+router.put("/:id", protect, updateProperty)
+router.delete("/:id", protect, deleteProperty)
 
 export default router
