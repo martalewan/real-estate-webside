@@ -1,6 +1,13 @@
-import type { Property } from "../../backend/src/data.js"
+import type { Property } from "../types/property"
 
 const API_URL = "http://localhost:5001"
+
+function normalizeProperty(property: any): Property {
+    return {
+        ...property,
+        id: property._id
+    }
+}
 
 function getAuthHeaders() {
     const token = localStorage.getItem("token")
@@ -18,17 +25,20 @@ export async function getProperties(): Promise<Property[]> {
         throw new Error("Failed to fetch properties")
     }
 
-    return response.json()
+    const data = await response.json()
+
+    return data.map(normalizeProperty)
 }
 
-export async function getProperty(id: number): Promise<Property> {
+export async function getProperty(id: string): Promise<Property> {
     const response = await fetch(`${API_URL}/api/properties/${id}`)
 
     if (!response.ok) {
         throw new Error("Failed to fetch property")
     }
 
-    return response.json()
+    const data = await response.json()
+    return normalizeProperty(data)
 }
 
 export async function createProperty(
@@ -44,11 +54,12 @@ export async function createProperty(
         throw new Error("Failed to create property")
     }
 
-    return response.json()
+    const data = await response.json()
+    return normalizeProperty(data)
 }
 
 export async function updateProperty(
-    id: number,
+    id: string,
     property: Omit<Property, "id">
 ): Promise<Property> {
     const response = await fetch(`${API_URL}/api/properties/${id}`, {
@@ -61,10 +72,11 @@ export async function updateProperty(
         throw new Error("Failed to update property")
     }
 
-    return response.json()
+    const data = await response.json()
+    return normalizeProperty(data)
 }
 
-export async function deleteProperty(id: number) {
+export async function deleteProperty(id: string) {
     const response = await fetch(`${API_URL}/api/properties/${id}`, {
         method: "DELETE",
         headers: getAuthHeaders()
@@ -86,7 +98,9 @@ export async function getMyProperties(): Promise<Property[]> {
         throw new Error("Failed to fetch my properties")
     }
 
-    const properties: Property[] = await response.json()
+    const data = await response.json()
+    const properties: Property[] = data.map(normalizeProperty)
+
     const user = JSON.parse(localStorage.getItem("user") || "null")
 
     return properties.filter(

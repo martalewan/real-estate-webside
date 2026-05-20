@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
-import { properties, type Property } from "../data.js"
 import type { AuthRequest } from "../middleware/authMiddleware.js"
+import { PropertyModel } from "../models/Property.js"
 
-export function getProperties(req: Request, res: Response<Property[]>) {
+export async function getProperties(req: Request, res: Response) {
     const {
         type,
         status,
@@ -13,113 +13,108 @@ export function getProperties(req: Request, res: Response<Property[]>) {
         bathrooms
     } = req.query
 
-    let filtered = [...properties]
+    const query: Record<string, unknown> = {}
 
-    if (type) {
-        filtered = filtered.filter(
-            property => property.type === String(type).toLowerCase()
-        )
-    }
-
-    if (status) {
-        filtered = filtered.filter(
-            property =>
-                property.status.toLowerCase() === String(status).toLowerCase()
-        )
-    }
+    if (type) query.type = String(type).toLowerCase()
+    if (status) query.status = String(status)
 
     if (location) {
-        filtered = filtered.filter(
-            property =>
-                property.location.toLowerCase().includes(String(location).toLowerCase()) ||
-                property.district.toLowerCase().includes(String(location).toLowerCase())
-        )
+        query.$or = [
+            { location: { $regex: String(location), $options: "i" } },
+            { district: { $regex: String(location), $options: "i" } }
+        ]
     }
 
-    if (minPrice) {
-        filtered = filtered.filter(property => property.price >= Number(minPrice))
-    }
+    if (minPrice || maxPrice) {
+        query.price = {}
 
-    if (maxPrice) {
-        filtered = filtered.filter(property => property.price <= Number(maxPrice))
+        if (minPrice) {
+            ; (query.price as Record<string, number>).$gte = Number(minPrice)
+        }
+
+        if (maxPrice) {
+            ; (query.price as Record<string, number>).$lte = Number(maxPrice)
+        }
     }
 
     if (bedrooms) {
-        filtered = filtered.filter(property => property.bedrooms >= Number(bedrooms))
+        query.bedrooms = { $gte: Number(bedrooms) }
     }
 
     if (bathrooms) {
-        filtered = filtered.filter(property => property.bathrooms >= Number(bathrooms))
+        query.bathrooms = { $gte: Number(bathrooms) }
     }
 
-    res.json(filtered)
+    const properties = await PropertyModel.find(query).sort({
+        createdAt: -1
+    })
+
+    res.json(properties)
 }
 
-export function getProperty(req: Request, res: Response) {
-    const property = properties.find(
-        property => property.id === Number(req.params.id)
-    )
+export async function getProperty(req: Request, res: Response) {
+    const property = await PropertyModel.findById(req.params.id)
 
     if (!property) {
-        return res.status(404).json({ message: "Property not found" })
+        return res.status(404).json({
+            message: "Property not found"
+        })
     }
 
     res.json(property)
 }
 
-export function createProperty(req: AuthRequest, res: Response) {
-    const newProperty: Property = {
+export async function createProperty(req: AuthRequest, res: Response) {
+    const newProperty = await PropertyModel.create({
         ...req.body,
-        id: properties.length + 1,
         ownerId: req.user?.id
-    }
-
-    properties.push(newProperty)
+    })
 
     res.status(201).json(newProperty)
 }
 
-export function updateProperty(req: AuthRequest, res: Response) {
-    const propertyId = Number(req.params.id)
+export async function updateProperty(req: AuthRequest, res: Response) {
+    const property = await PropertyModel.findById(req.params.id)
 
-    const index = properties.findIndex(
-        property => property.id === propertyId
-    )
-
-    if (index === -1) {
+    if (!property) {
         return res.status(404).json({
             message: "Property not found"
         })
     }
 
-    const updatedProperty: Property = {
-        ...properties[index],
-        ...req.body,
-        id: propertyId
+    if (property.ownerId.toString() !== req.user?.id) {
+        return res.status(403).json({
+            message: "Not authorized"
+        })
     }
 
-    properties[index] = updatedProperty
+    const updatedProperty = await PropertyModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+    )
 
     res.json(updatedProperty)
 }
 
-export function deleteProperty(req: AuthRequest, res: Response) {
-    const propertyId = Number(req.params.id)
+export async function deleteProperty(req: AuthRequest, res: Response) {
+    const property = await PropertyModel.findById(req.params.id)
 
-    const index = properties.findIndex(
-        property => property.id === propertyId
-    )
-
-    if (index === -1) {
+    if (!property) {
         return res.status(404).json({
             message: "Property not found"
         })
     }
 
-    const deletedProperty = properties.splice(index, 1)[0]
+    if (property.ownerId.toString() !== req.user?.id) {
+        return res.status(403).json({
+            message: "Not authorized"
+        })
+    }
+
+    await property.deleteOne()
 
     res.json({
-        message: "Property deleted successfully",
-        property: deletedProperty
+        message: "Property deleted successfully"
     })
 }

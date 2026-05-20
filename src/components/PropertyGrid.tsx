@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import PropertyCard from "./PropertyCard"
 import { getProperties } from "../api/properties"
-import type { Property } from "../../backend/src/data.js"
+import type { Property } from "../types/property"
 
 export default function PropertyGrid() {
     const [properties, setProperties] = useState<Property[]>([])

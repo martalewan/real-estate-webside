@@ -3,7 +3,7 @@ import { BedDouble, Bath, Ruler } from "lucide-react"
 import useFavorites from "../hooks/useFavorites"
 
 type PropertyCardProps = {
-    id: number
+    id: string
     title: string
     location: string
     price: string | number

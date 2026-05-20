@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import type { LucideIcon } from "lucide-react"
-import type { Property } from "../../backend/src/data.js"
+import type { Property } from "../types/property"
 import { deleteProperty } from "../api/properties"
 import { useNavigate } from "react-router-dom"
 
@@ -43,7 +43,7 @@ export default function Property() {
     useEffect(() => {
         if (!id) return
 
-        getProperty(Number(id))
+        getProperty(id)
             .then(setProperty)
             .catch(console.error)
             .finally(() => setLoading(false))
@@ -274,7 +274,7 @@ export default function Property() {
                         <button className="btn w-full">
                             Request Private Viewing
                         </button>
-                        {user && Number(user.id) === property.ownerId && (
+                        {user && user.id === property.ownerId && (
                             <>
                                 <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
                                     Edit Property

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import useFavorites from "../hooks/useFavorites"
 import PropertyCard from "../components/PropertyCard"
 import { getProperties } from "../api/properties"
-import type { Property } from "../../backend/src/data.js"
+import type { Property } from "../types/property"
 
 export default function Favorites() {
     const { favorites, clearFavorites } = useFavorites()

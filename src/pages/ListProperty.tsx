@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+
 import { uploadImageToCloudinary } from "../api/cloudinary"
 
 import {
@@ -7,13 +8,15 @@ import {
     getProperty,
     updateProperty
 } from "../api/properties"
-import type { Property } from "../../backend/src/data"
+
+
 import PropertyDetailsSection from "../components/PropertyDetailsSection"
 import AmenitiesSection from "../components/AmenitiesSection"
 import ImagesSection from "../components/ImageSection"
 import SpecificationsSection from "../components/SpecificationsSection"
 import DescriptionSection from "../components/DescriptionSection"
 import ContactSection from "../components/ContactSection"
+import type { Property } from "../types/property"
 
 export type PropertyForm = {
     title: string
@@ -65,16 +68,19 @@ const initialForm: PropertyForm = {
 
 export default function ListProperty() {
     const navigate = useNavigate()
+
     const { id } = useParams<{ id: string }>()
+
     const isEditing = Boolean(id)
 
     const [form, setForm] = useState<PropertyForm>(initialForm)
+
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (!id) return
 
-        getProperty(Number(id)).then((property) => {
+        getProperty(id).then((property) => {
             setForm({
                 title: property.title,
                 location: property.location,
@@ -129,7 +135,9 @@ export default function ListProperty() {
         const files = Array.from(e.target.files || [])
 
         const imageUrls = await Promise.all(
-            files.map((file) => uploadImageToCloudinary(file))
+            files.map((file) =>
+                uploadImageToCloudinary(file)
+            )
         )
 
         updateField("galleryImages", imageUrls)
@@ -155,7 +163,7 @@ export default function ListProperty() {
         try {
             setLoading(true)
 
-            const propertyData = await createProperty({
+            const propertyData = {
                 title: form.title,
                 location: form.location,
                 district: form.district,
@@ -182,13 +190,22 @@ export default function ListProperty() {
                     email: form.contactEmail,
                     phone: form.contactPhone
                 }
-            })
+            }
 
-            const savedProperty = isEditing && id
-                ? await updateProperty(Number(id), propertyData)
-                : await createProperty(propertyData)
+            const savedProperty =
+                isEditing && id
+                    ? await updateProperty(
+                        id,
+                        propertyData
+                    )
+                    : await createProperty(
+                        propertyData
+                    )
 
-            navigate(`/properties/${savedProperty.id}`)
+            navigate(
+                `/properties/${savedProperty.id}`
+            )
+
         } catch (error) {
             console.error(error)
         } finally {
@@ -200,7 +217,8 @@ export default function ListProperty() {
         <div className="container pt-32 pb-20">
             <div className="grid lg:grid-cols-[0.78fr_1.22fr] gap-20 items-start">
 
-                <div className="space-y-6 block md:sticky top-32">
+                <div className="space-y-6 block lg:sticky top-32">
+
                     <p className="text-[11px] tracking-[0.34em] uppercase text-gray-400">
                         List Property
                     </p>
@@ -212,6 +230,7 @@ export default function ListProperty() {
                     <p className="text-gray-500 leading-relaxed max-w-md">
                         Create a premium private listing.
                     </p>
+
                 </div>
 
                 <form
@@ -255,8 +274,12 @@ export default function ListProperty() {
                         disabled={loading}
                     >
                         {loading
-                            ? isEditing ? "Updating..." : "Publishing..."
-                            : isEditing ? "Update Listing" : "Publish Listing"}
+                            ? isEditing
+                                ? "Updating..."
+                                : "Publishing..."
+                            : isEditing
+                                ? "Update Listing"
+                                : "Publish Listing"}
                     </button>
 
                 </form>

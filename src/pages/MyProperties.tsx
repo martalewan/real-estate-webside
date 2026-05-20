@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 import { getMyProperties } from "../api/properties"
 import PropertyCard from "../components/PropertyCard"
-import type { Property } from "../../backend/src/data"
+import type { Property } from "../types/property"
 
 export default function MyProperties() {
     const [properties, setProperties] = useState<Property[]>([])

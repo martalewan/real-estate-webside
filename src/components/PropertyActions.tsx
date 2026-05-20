@@ -1,7 +1,7 @@
 import useFavorites from "../hooks/useFavorites"
 
 type Property = {
-    id: number
+    id: string
     title: string
 }
 

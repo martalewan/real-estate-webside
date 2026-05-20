@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom"
 import { getProperties } from "../api/properties"
 import PropertyCard from "../components/PropertyCard"
 import Filters, { type FiltersState } from "../components/Filters"
-import type { Property } from "../../backend/src/data"
+import type { Property } from "../types/property"
 
 type FilterKey = keyof FiltersState
 
@@ -77,7 +77,7 @@ export default function Properties() {
                 case "beds-desc":
                     return b.bedrooms - a.bedrooms
                 default:
-                    return b.id - a.id
+                    return b.id.localeCompare(a.id)
             }
         })
 

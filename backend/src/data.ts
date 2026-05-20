@@ -13,8 +13,8 @@ export type PropertyStatus =
 export type EnergyRating = "A" | "B" | "C"
 
 export type Property = {
-    id: number
-    ownerId?: number,
+    id: string
+    ownerId?: string,
     type: PropertyType
     status: PropertyStatus
     location: string
@@ -226,7 +226,7 @@ export const properties: Property[] = Array.from({ length: 30 }, (_, index) => {
     const seed = generateSeed(type, city, index)
 
     return {
-        id: index + 1,
+        id: String(index + 1),
         type,
         status:
             index % 3 === 0

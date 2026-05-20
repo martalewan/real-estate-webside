@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 
 export type AuthRequest = Request & {
     user?: {
-        id: number
+        id: string
         email: string
     }
 }
@@ -28,7 +28,7 @@ export function protect(
             token,
             process.env.JWT_SECRET as string
         ) as {
-            id: number
+            id: string
             email: string
         }
 

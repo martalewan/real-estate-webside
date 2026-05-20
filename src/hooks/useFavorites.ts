@@ -3,14 +3,14 @@ import { useEffect, useState } from "react"
 const FAVORITES_KEY = "favorites"
 const FAVORITES_EVENT = "favorites-change"
 
-function readFavorites(): number[] {
+function readFavorites(): string[] {
     try {
         const stored = JSON.parse(
             localStorage.getItem(FAVORITES_KEY) || "[]"
         ) as unknown
 
         return Array.isArray(stored) &&
-            stored.every((item) => typeof item === "number")
+            stored.every((item) => typeof item === "string")
             ? stored
             : []
     } catch {
@@ -19,7 +19,7 @@ function readFavorites(): number[] {
 }
 
 export default function useFavorites() {
-    const [favorites, setFavorites] = useState<number[]>(readFavorites)
+    const [favorites, setFavorites] = useState<string[]>(readFavorites)
 
     useEffect(() => {
         const syncFavorites = () => {
@@ -35,7 +35,7 @@ export default function useFavorites() {
         }
     }, [])
 
-    const updateFavorites = (nextFavorites: number[]) => {
+    const updateFavorites = (nextFavorites: string[]) => {
         setFavorites(nextFavorites)
 
         localStorage.setItem(
@@ -46,7 +46,7 @@ export default function useFavorites() {
         window.dispatchEvent(new Event(FAVORITES_EVENT))
     }
 
-    const toggle = (id: number) => {
+    const toggle = (id: string) => {
         const nextFavorites = favorites.includes(id)
             ? favorites.filter((favoriteId) => favoriteId !== id)
             : [...favorites, id]
@@ -54,7 +54,7 @@ export default function useFavorites() {
         updateFavorites(nextFavorites)
     }
 
-    const isFavorite = (id: number) => {
+    const isFavorite = (id: string) => {
         return favorites.includes(id)
     }
 
