@@ -3,7 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import propertyRoutes from "./routes/propertyRoutes.js"
 import contactRoutes from "./routes/contactRoutes.js"
-
+import authRoutes from "./routes/authRoutes.js"
 
 dotenv.config()
 
@@ -20,6 +20,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/properties", propertyRoutes)
 app.use("/api/contact", contactRoutes)
+app.use("/api/auth", authRoutes)
 
 app.listen(PORT, () => {
     console.log(`Backend running on http://localhost:${PORT}`)
