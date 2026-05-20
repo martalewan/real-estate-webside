@@ -18,8 +18,12 @@ export default function Favorites() {
             .finally(() => setLoading(false))
     }, [])
 
+    const validFavoriteIds = favorites.filter((id) =>
+        properties.some((property) => property.id === id)
+    )
+
     const favoriteProperties = properties.filter((property) =>
-        favorites.includes(property.id)
+        validFavoriteIds.includes(property.id)
     )
 
     if (loading) {
