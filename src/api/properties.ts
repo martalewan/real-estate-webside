@@ -56,3 +56,18 @@ export async function updateProperty(
 
     return response.json()
 }
+
+export async function deleteProperty(id: number) {
+    const response = await fetch(
+        `${API_URL}/api/properties/${id}`,
+        {
+            method: "DELETE"
+        }
+    )
+
+    if (!response.ok) {
+        throw new Error("Failed to delete property")
+    }
+
+    return response.json()
+}

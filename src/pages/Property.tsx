@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import type { LucideIcon } from "lucide-react"
 import type { Property } from "../../backend/src/data.js"
+import { deleteProperty } from "../api/properties"
+import { useNavigate } from "react-router-dom"
 
 import {
     BedDouble,
@@ -15,12 +17,26 @@ import { getProperty } from "../api/properties"
 
 import Gallery from "../components/Gallery"
 import PropertyActions from "../components/PropertyActions"
+import ConfirmModal from "../components/ConfirmModal.js"
 
 export default function Property() {
+    const navigate = useNavigate()
     const { id } = useParams<{ id: string }>()
-
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [property, setProperty] = useState<Property | null>(null)
     const [loading, setLoading] = useState(true)
+
+    const handleDelete = async () => {
+        if (!property) return
+
+        try {
+            await deleteProperty(property.id)
+
+            navigate("/properties")
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     useEffect(() => {
         if (!id) return
@@ -259,11 +275,27 @@ export default function Property() {
                         <Link to={`/properties/${property.id}/edit`} className="btn w-full flex items-center justify-center">
                             Edit Property
                         </Link>
+                        <button
+                            onClick={() => setShowDeleteModal(true)}
+                            className="hiddenrounded-xl w-full border border-red-500 text-red-500 py-2 hover:bg-red-500 hover:text-white transition"
+                        >
+                            Delete Property
+                        </button>
                     </div>
 
                 </aside>
 
             </div>
+            <ConfirmModal
+                open={showDeleteModal}
+                title="Delete this property?"
+                description="This listing will be permanently removed and cannot be recovered."
+                confirmText="Delete Permanently"
+                cancelText="Cancel"
+                danger
+                onCancel={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
+            />
         </div>
     )
 }
