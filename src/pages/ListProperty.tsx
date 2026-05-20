@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { uploadImageToCloudinary } from "../api/cloudinary"
 
 import {
     createProperty,
@@ -110,22 +111,6 @@ export default function ListProperty() {
         }))
     }
 
-    const fileToBase64 = (
-        file: File
-    ): Promise<string> => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader()
-
-            reader.onload = () => {
-                resolve(reader.result as string)
-            }
-
-            reader.onerror = reject
-
-            reader.readAsDataURL(file)
-        })
-    }
-
     const handleMainImageUpload = async (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -133,9 +118,9 @@ export default function ListProperty() {
 
         if (!file) return
 
-        const image = await fileToBase64(file)
+        const imageUrl = await uploadImageToCloudinary(file)
 
-        updateField("mainImage", image)
+        updateField("mainImage", imageUrl)
     }
 
     const handleGalleryUpload = async (
@@ -143,11 +128,11 @@ export default function ListProperty() {
     ) => {
         const files = Array.from(e.target.files || [])
 
-        const images = await Promise.all(
-            files.map((file) => fileToBase64(file))
+        const imageUrls = await Promise.all(
+            files.map((file) => uploadImageToCloudinary(file))
         )
 
-        updateField("galleryImages", images)
+        updateField("galleryImages", imageUrls)
     }
 
     const toggleAmenity = (amenity: string) => {
