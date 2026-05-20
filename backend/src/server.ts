@@ -4,8 +4,11 @@ import dotenv from "dotenv"
 import propertyRoutes from "./routes/propertyRoutes.js"
 import contactRoutes from "./routes/contactRoutes.js"
 import authRoutes from "./routes/authRoutes.js"
+import { connectDB } from "./config/db.js"
 
 dotenv.config()
+
+connectDB()
 
 const app = express()
 const PORT = process.env.PORT || 5001
